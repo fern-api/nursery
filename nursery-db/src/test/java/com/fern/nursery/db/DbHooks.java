@@ -69,7 +69,7 @@ public final class DbHooks {
 
     private static HikariConfig getHikariConfig(String jdbcUrl) {
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setPoolName("quill-db-pool-test");
+        hikariConfig.setPoolName("nursery-db-pool-test");
         hikariConfig.setJdbcUrl(jdbcUrl);
         hikariConfig.setMaximumPoolSize(5);
         hikariConfig.setInitializationFailTimeout(-1L);
