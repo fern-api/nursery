@@ -53,7 +53,7 @@ services:
         
         check: 
           method: POST
-          path: /verify
+          path: /check
           request: CheckTokenRequest
           response: boolean
           errors: 
