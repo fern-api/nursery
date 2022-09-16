@@ -14,28 +14,23 @@
  * limitations under the License.
  */
 
-package com.fern.nursery.dagger;
+package com.fern.nursery;
 
-import com.fern.nursery.HealthResource;
-import com.fern.nursery.TokenResource;
-import com.fern.nursery.config.NurseryConfig;
-import dagger.BindsInstance;
-import dagger.Component;
-import javax.inject.Singleton;
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-@Singleton
-@Component
-public interface NurseryCoordinatorComponent {
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+@Path("/health")
+public class HealthResource {
 
-    TokenResource getTokenResource();
+    @Inject
+    public HealthResource() {}
 
-    HealthResource getHealthResource();
-
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        Builder config(NurseryConfig nurseryConfig);
-
-        NurseryCoordinatorComponent build();
-    }
+    @GET
+    public void create() {}
 }

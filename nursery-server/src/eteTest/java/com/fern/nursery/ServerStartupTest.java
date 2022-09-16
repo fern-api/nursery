@@ -26,16 +26,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-public class CoordinatorStartupTest {
+public class ServerStartupTest {
 
     @RegisterExtension
     public static final DockerComposeExtension DB_DOCKER_RULE = DockerComposeExtension.builder()
             .waitingForService(
-                    "fiddle-coordinator",
-                    HealthChecks.toRespondOverHttp(
-                            8080, port -> port.inFormat("http://$HOST:$EXTERNAL_PORT/api/health")))
+                    "nursery-server",
+                    HealthChecks.toRespondOverHttp(8080, port -> port.inFormat("http://$HOST:$EXTERNAL_PORT/health")))
             .file("compose-ete.yml")
-            .saveLogsTo(circleAwareLogDirectory(CoordinatorStartupTest.class))
+            .saveLogsTo(circleAwareLogDirectory(ServerStartupTest.class))
             .shutdownStrategy(ShutdownStrategy.KILL_DOWN)
             .build();
 
