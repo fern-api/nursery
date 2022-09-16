@@ -16,3 +16,13 @@ com.palantir.docker.compose:docker-compose-junit-jupiter = 1.7.0
 
 # fern
 com.fern.fern:nursery-api-server-jersey = 0.0.1
+
+# db deps
+org.jooq:* = 3.14.9
+org.liquibase:liquibase-core = 4.3.5
+com.h2database:h2 = 1.4.200
+org.yaml:snakeyaml = 1.27
+com.mattbertolini:liquibase-slf4j = 4.0.0
+org.jdbi:jdbi = 2.78
+com.zaxxer:HikariCP-java7 = 2.4.13
+org.postgresql:postgresql = 42.2.20

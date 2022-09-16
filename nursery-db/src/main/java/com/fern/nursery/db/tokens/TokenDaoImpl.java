@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2022 Parsely Technologies Inc. All rights reserved.
+ * (c) Copyright 2022 Birch Solutions Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,19 @@
  * limitations under the License.
  */
 
-rootProject.name = 'nursery'
+package com.fern.nursery.db.tokens;
 
-include 'nursery-server'
-include 'nursery-db'
+import org.jooq.DSLContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public final class TokenDaoImpl implements TokenDao {
+
+    private static final Logger log = LoggerFactory.getLogger(TokenDaoImpl.class);
+
+    private final DSLContext transactionContext;
+
+    public TokenDaoImpl(DSLContext transactionContext) {
+        this.transactionContext = transactionContext;
+    }
+}
