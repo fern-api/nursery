@@ -15,7 +15,7 @@ org.mockito:* = 3.11.2
 com.palantir.docker.compose:docker-compose-junit-jupiter = 1.7.0
 
 # fern
-com.fern.fern:nursery-api-server-jersey = 0.0.1
+com.fern.fern:nursery-api-server-jersey = 0.0.2
 
 # db deps
 org.jooq:* = 3.14.9
@@ -26,3 +26,6 @@ com.mattbertolini:liquibase-slf4j = 4.0.0
 org.jdbi:jdbi = 2.78
 com.zaxxer:HikariCP-java7 = 2.4.13
 org.postgresql:postgresql = 42.2.20
+
+# misc
+com.google.guava:guava = 31.0.1-jre

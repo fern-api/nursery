@@ -21,6 +21,10 @@ dependencies {
     implementation( 'org.liquibase:liquibase-core') {
         exclude module: 'logback-classic'
     }
+    implementation 'com.google.guava:guava'
+
+    annotationProcessor 'org.immutables:value'
+    compileOnly 'org.immutables:value::annotations'
 
     testRuntimeOnly 'com.h2database:h2' // h2 database driver
 

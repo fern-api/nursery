@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package com.fern.nursery.db.tokens;
+package com.fern.nursery.config;
 
-import java.util.List;
-import java.util.Optional;
+public abstract class EnvironmentVariables {
 
-public interface TokenDao {
+    public static final String JDBC_URL = "JDBC_URL";
 
-    /**
-     * Creates and persists a new token.
-     * @param ownerId owner of generated token
-     * @param description description associated with token
-     * @return tokenId
-     */
-    CreatedToken createToken(String ownerId, Optional<String> description);
+    public static final String MAINTENANCE_JDBC_URL = "MAINTENANCE_JDBC_URL";
 
-    Optional<TokenInfo> getToken(String token);
+    public abstract String jdbcUrl();
 
-    List<TokenInfo> getTokensForOwner(String ownerId);
+    public abstract String maintenanceJdbcUrl();
 }

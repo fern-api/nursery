@@ -24,7 +24,7 @@ import dagger.Component;
 import javax.inject.Singleton;
 
 @Singleton
-@Component
+@Component(modules = NurseryModule.class)
 public interface NurseryCoordinatorComponent {
 
     TokenResource getTokenResource();

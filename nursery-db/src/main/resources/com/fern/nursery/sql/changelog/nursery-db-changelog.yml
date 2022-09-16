@@ -28,11 +28,13 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     - nullable: false
+                      primaryKey: true
               - column:
-                  name: token
-                  type: varchar(255)
+                  name: token_hash
+                  type: varchar(1000)
                   constraints:
                     - nullable: false
+                      unique: true
               - column:
                   name: created_datetime
                   type: datetime
@@ -41,5 +43,3 @@ databaseChangeLog:
               - column:
                   name: description
                   type: varchar(10000)
-                  constraints:
-                    nullable: false

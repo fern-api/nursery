@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package com.fern.nursery.db.tokens;
+package com.fern.nursery.dagger;
 
-import java.util.List;
-import java.util.Optional;
+import com.fern.nursery.config.NurseryConfig;
+import com.fern.nursery.db.NurseryDatabase;
+import dagger.Module;
+import dagger.Provides;
+import javax.inject.Singleton;
 
-public interface TokenDao {
+@Module
+public final class NurseryModule {
 
-    /**
-     * Creates and persists a new token.
-     * @param ownerId owner of generated token
-     * @param description description associated with token
-     * @return tokenId
-     */
-    CreatedToken createToken(String ownerId, Optional<String> description);
-
-    Optional<TokenInfo> getToken(String token);
-
-    List<TokenInfo> getTokensForOwner(String ownerId);
+    @Provides
+    @Singleton
+    public NurseryDatabase provideNurseryDatabase(NurseryConfig nurseryConfig) {
+        return NurseryDatabase.create(nurseryConfig.maintenanceJdbcUrl(), nurseryConfig.jdbcUrl());
+    }
 }
