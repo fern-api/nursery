@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - property:
+      name: attribute_bytes_type
+      value: BYTEA
+      dbms: postgresql
+  - property:
+      name: attribute_bytes_type
+      value: LONGVARBINARY
+      dbms: hsqldb
+  - property:
+      name: attribute_bytes_type
+      value: BLOB
+
+  - changeSet:
+      id: 1
+      author: deep@buildwithfern.com
+      changes:
+        - createTable:
+            tableName: tokens
+            columns:
+              - column:
+                  name: owner_id
+                  type: varchar(255)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: token_id
+                  type: varchar(255)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: token
+                  type: varchar(255)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: created_datetime
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(10000)
+                  constraints:
+                    nullable: false

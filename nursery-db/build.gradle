@@ -1,0 +1,96 @@
+apply plugin: 'java-library'
+apply plugin: 'org.liquibase.gradle'
+apply plugin: 'nu.studer.jooq'
+apply plugin: 'org.unbroken-dome.test-sets'
+
+testSets {
+    eteTest
+}
+
+dependencies {
+    liquibaseRuntime 'com.h2database:h2'
+    liquibaseRuntime 'org.liquibase:liquibase-core'
+    liquibaseRuntime 'org.yaml:snakeyaml'
+    jooqRuntime 'org.jooq:jooq-meta-extensions'
+    runtimeOnly 'org.postgresql:postgresql' // postgres database driver
+    runtimeOnly 'com.mattbertolini:liquibase-slf4j'
+
+    implementation 'com.zaxxer:HikariCP-java7'
+    implementation 'org.jooq:jooq'
+    implementation 'org.jdbi:jdbi'
+    implementation( 'org.liquibase:liquibase-core') {
+        exclude module: 'logback-classic'
+    }
+
+    testRuntimeOnly 'com.h2database:h2' // h2 database driver
+
+    testImplementation 'com.palantir.docker.compose:docker-compose-junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.assertj:assertj-core'
+
+    eteTestImplementation project(':nursery-db').sourceSets.test.output
+}
+
+def h2Dir = file("${buildDir}/sql")
+def h2JdbcUrl = "jdbc:h2:${h2Dir}/h2db;AUTO_SERVER=TRUE;MODE=MYSQL"
+def dbChangelogNonRelative = 'com/fern/nursery/sql/changelog/nursery-db-changelog.yml'
+def dbChangelog = file('src/main/resources/' + dbChangelogNonRelative)
+
+liquibase {
+    activities {
+        main {
+            changeLogFile dbChangelogNonRelative
+            classpath "${projectDir}/src/main/resources/"
+            url h2JdbcUrl
+            username ''
+            password ''
+        }
+    }
+}
+
+tasks.update {
+    inputs.file dbChangelog
+    outputs.dir h2Dir
+}
+
+jooq {
+    version = '3.14.9'
+    nursery(sourceSets.main) {
+        jdbc {
+            driver = 'org.h2.Driver'
+            url = h2JdbcUrl
+            user = ''
+            password = ''
+        }
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            database {
+                name = 'org.jooq.meta.h2.H2Database'
+                includes = '.*'
+                excludes = ''
+            }
+            target {
+                packageName = "com.fern.nursery.sql"
+            }
+        }
+    }
+}
+
+task deleteH2Db(type: Delete) {
+    delete h2Dir
+}
+
+idea {
+    module {
+        sourceDirs += file('build/generated-src/jooq/nursery/')
+    }
+}
+
+tasks.update.dependsOn deleteH2Db
+tasks.generateNurseryJooqSchemaSource.dependsOn cleanGenerateNurseryJooqSchemaSource
+tasks.generateNurseryJooqSchemaSource.dependsOn update
+tasks.idea.dependsOn generateNurseryJooqSchemaSource
+
+rootProject.tasks.build.dependsOn eteTest

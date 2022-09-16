@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2022 Parsely Technologies Inc. All rights reserved.
+ * (c) Copyright 2022 Birch Solutions Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,21 @@
  * limitations under the License.
  */
 
-rootProject.name = 'nursery'
+package com.fern.nursery.db;
 
-include 'nursery-server'
-include 'nursery-db'
+import com.fern.nursery.db.tokens.TokenDao;
+import com.fern.nursery.db.tokens.TokenDaoImpl;
+import org.jooq.DSLContext;
+
+public final class NurseryDaoImpl implements NurseryDao {
+    private final TokenDao tokenDao;
+
+    public NurseryDaoImpl(DSLContext transactionContext) {
+        this.tokenDao = new TokenDaoImpl(transactionContext);
+    }
+
+    @Override
+    public TokenDao tokenDao() {
+        return tokenDao;
+    }
+}

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2022 Parsely Technologies Inc. All rights reserved.
+ * (c) Copyright 2022 Birch Solutions Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-rootProject.name = 'nursery'
+package com.fern.nursery.db;
 
-include 'nursery-server'
-include 'nursery-db'
+public final class H2DbPublicTests implements BaseNurseryDbTests {
+
+    private static final String H2_JDBC_URL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=MYSQL;";
+    private static final DbHooks A = new DbHooks(H2_JDBC_URL);
+
+    @Override
+    public DbHooks getDbHooks() {
+        return A;
+    }
+}
