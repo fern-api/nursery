@@ -2,32 +2,31 @@
 
 types:
 
-  ClientId: 
+  OwnerId: 
     alias: string
-    docs: Unique id for client that consumes a token
+    docs: Unique id for a token owner.
 
-  TokenId: 
-    alias: string
-    docs: Unique id for token set by the client. 
+  TokenId: string
   
   CreateTokenRequest:
     properties: 
-      clientId: ClientId
-      tokenId: TokenId
+      ownerId: OwnerId
+      description: string
   
   CreateTokenResponse: 
     properties: 
       token: string
+      tokenId: TokenId
   
-  CheckTokenRequest: 
+  GetTokenMetadataRequest: 
     properties: 
-      clientId: ClientId
       token: string
   
   TokenMetadata: 
     properties: 
       tokenId: TokenId
-      clientId: ClientId
+      ownerId: OwnerId
+      description: string
       createdTime: datetime
       status: TokenStatus
   
@@ -51,24 +50,23 @@ services:
           request: CreateTokenRequest
           response: CreateTokenResponse
         
-        check: 
+        getTokenMetadata: 
           method: POST
-          path: /check
-          request: CheckTokenRequest
-          response: boolean
+          path: /metadata
+          request: GetTokenMetadataRequest
+          response: TokenMetadata
           errors: 
-            - ClientNotFoundError
-        
-        getTokensByClient: 
+            - TokenNotFoundError
+
+        # add paging
+        getTokensForOwner: 
           method: GET
-          path: /ids/{clientId}
+          path: /owner/{ownerId}
           path-parameters:
-            clientId: ClientId
+            ownerId: OwnerId
           response: list<TokenMetadata>
-          errors: 
-            - ClientNotFoundError
       
 errors:
-  ClientNotFoundError:
+  TokenNotFoundError:
     http:
       statusCode: 404
