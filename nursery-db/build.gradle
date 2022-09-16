@@ -33,7 +33,7 @@ dependencies {
 
 def h2Dir = file("${buildDir}/sql")
 def h2JdbcUrl = "jdbc:h2:${h2Dir}/h2db;AUTO_SERVER=TRUE;MODE=MYSQL"
-def dbChangelogNonRelative = 'com/birch/quill/sql/changelog/quill-db-changelog.yml'
+def dbChangelogNonRelative = 'com/fern/nursery/sql/changelog/nursery-db-changelog.yml'
 def dbChangelog = file('src/main/resources/' + dbChangelogNonRelative)
 
 liquibase {
