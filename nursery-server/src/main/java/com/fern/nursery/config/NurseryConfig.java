@@ -26,11 +26,14 @@ import org.slf4j.LoggerFactory;
 @StagedBuilderImmutablesStyle
 @SuppressWarnings("checkstyle:DesignForExtension")
 public abstract class NurseryConfig extends EnvironmentVariables {
+
+    @Override
     @Value.Lazy
     public String jdbcUrl() {
         return getEnvVar(EnvironmentVariables.JDBC_URL);
     }
 
+    @Override
     @Value.Lazy
     public String maintenanceJdbcUrl() {
         return getEnvVar(EnvironmentVariables.MAINTENANCE_JDBC_URL);
