@@ -16,20 +16,4 @@
 
 package com.fern.nursery.db.tokens;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface TokenDao {
-
-    /**
-     * Creates and persists a new token.
-     * @param ownerId owner of generated token
-     * @param description description associated with token
-     * @return tokenId
-     */
-    CreatedToken createToken(String ownerId, Optional<String> description);
-
-    Optional<TokenInfo> getToken(String token);
-
-    List<TokenInfo> getTokensForOwner(String ownerId);
-}
+public class TokenNotFoundException extends Exception {}

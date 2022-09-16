@@ -19,6 +19,7 @@ buildscript {
 }
 
 plugins {
+    id 'org.inferred.processors' version '3.3.0'
     id 'com.avast.gradle.docker-compose' version '0.14.3'
     id 'maven-publish'
 }
@@ -43,6 +44,7 @@ allprojects {
 
     apply plugin: 'com.palantir.java-format'
     apply plugin: 'maven-publish'
+    apply plugin: 'org.inferred.processors'
 
     version rootProject.version
     group rootProject.group

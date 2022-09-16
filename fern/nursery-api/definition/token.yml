@@ -11,7 +11,7 @@ types:
   CreateTokenRequest:
     properties: 
       ownerId: OwnerId
-      description: string
+      description: optional<string>
   
   CreateTokenResponse: 
     properties: 
@@ -26,7 +26,7 @@ types:
     properties: 
       tokenId: TokenId
       ownerId: OwnerId
-      description: string
+      description: optional<string>
       createdTime: datetime
       status: TokenStatus
   

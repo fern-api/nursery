@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package com.fern.nursery.db.tokens;
+package com.fern.nursery.db;
 
-import java.util.List;
-import java.util.Optional;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import org.immutables.value.Value;
 
-public interface TokenDao {
-
-    /**
-     * Creates and persists a new token.
-     * @param ownerId owner of generated token
-     * @param description description associated with token
-     * @return tokenId
-     */
-    CreatedToken createToken(String ownerId, Optional<String> description);
-
-    Optional<TokenInfo> getToken(String token);
-
-    List<TokenInfo> getTokensForOwner(String ownerId);
-}
+@Target({ElementType.PACKAGE, ElementType.TYPE})
+@Retention(RetentionPolicy.CLASS)
+@Value.Style(
+        jdkOnly = true,
+        get = {"get*", "is*"},
+        stagedBuilder = true)
+public @interface StagedImmutablesStyle {}

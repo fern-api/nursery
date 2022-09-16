@@ -25,7 +25,16 @@ import org.slf4j.LoggerFactory;
 @Value.Immutable
 @StagedBuilderImmutablesStyle
 @SuppressWarnings("checkstyle:DesignForExtension")
-public abstract class NurseryConfig {
+public abstract class NurseryConfig extends EnvironmentVariables {
+    @Value.Lazy
+    public String jdbcUrl() {
+        return getEnvVar(EnvironmentVariables.JDBC_URL);
+    }
+
+    @Value.Lazy
+    public String maintenanceJdbcUrl() {
+        return getEnvVar(EnvironmentVariables.MAINTENANCE_JDBC_URL);
+    }
 
     private static final Logger log = LoggerFactory.getLogger(NurseryConfig.class);
 

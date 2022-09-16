@@ -28,6 +28,8 @@ import org.jooq.tools.jdbc.JDBCUtils;
 
 public final class NurseryDatabase {
 
+    private static final String NURSERY_DATABASE_NAME = "nursery";
+
     private final Supplier<DSLContext> dslContextSupplier;
 
     public NurseryDatabase(Supplier<DSLContext> dslContextSupplier) {
@@ -56,9 +58,9 @@ public final class NurseryDatabase {
         return db;
     }
 
-    public static NurseryDatabase create(String maintenanceDbJdbcUrl, String jdbcUrl, String databaseName) {
+    public static NurseryDatabase create(String maintenanceDbJdbcUrl, String jdbcUrl) {
         // create database if doesn't exist
-        createDbIfNotExists(maintenanceDbJdbcUrl, databaseName);
+        createDbIfNotExists(maintenanceDbJdbcUrl, NURSERY_DATABASE_NAME);
         // run liquibase migration on created database
         HikariConfig hikariConfig = getHikariConfig(jdbcUrl, "quill-db-pool", 5);
         HikariDataSource hikariDataSource = new HikariDataSource(hikariConfig);

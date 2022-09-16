@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-plugins {
-    id "org.inferred.processors" version "3.6.0"
-}
-
 apply plugin: 'java-library'
 apply plugin: 'com.palantir.sls-java-service-distribution'
 apply plugin: 'org.unbroken-dome.test-sets'
 apply plugin: 'com.palantir.docker'
 
 dependencies {
+    implementation project(':nursery-db')
     implementation 'com.fern.fern:nursery-api-server-jersey'
     implementation 'org.springframework.boot:spring-boot-starter-jersey'
     implementation 'com.google.dagger:dagger'

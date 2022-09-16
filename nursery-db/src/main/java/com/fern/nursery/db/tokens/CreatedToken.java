@@ -16,20 +16,18 @@
 
 package com.fern.nursery.db.tokens;
 
-import java.util.List;
-import java.util.Optional;
+import com.fern.nursery.db.StagedImmutablesStyle;
+import org.immutables.value.Value;
 
-public interface TokenDao {
+@Value.Immutable
+@StagedImmutablesStyle
+public interface CreatedToken {
 
-    /**
-     * Creates and persists a new token.
-     * @param ownerId owner of generated token
-     * @param description description associated with token
-     * @return tokenId
-     */
-    CreatedToken createToken(String ownerId, Optional<String> description);
+    String tokenId();
 
-    Optional<TokenInfo> getToken(String token);
+    String token();
 
-    List<TokenInfo> getTokensForOwner(String ownerId);
+    static ImmutableCreatedToken.TokenIdBuildStage builder() {
+        return ImmutableCreatedToken.builder();
+    }
 }
