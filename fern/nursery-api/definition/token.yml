@@ -1,0 +1,74 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+types:
+
+  ClientId: 
+    alias: string
+    docs: Unique id for client that consumes a token
+
+  TokenId: 
+    alias: string
+    docs: Unique id for token set by the client. 
+  
+  CreateTokenRequest:
+    properties: 
+      clientId: ClientId
+      tokenId: TokenId
+  
+  CreateTokenResponse: 
+    properties: 
+      token: string
+  
+  CheckTokenRequest: 
+    properties: 
+      clientId: ClientId
+      token: string
+  
+  TokenMetadata: 
+    properties: 
+      tokenId: TokenId
+      clientId: ClientId
+      createdTime: datetime
+      status: TokenStatus
+  
+  TokenStatus: 
+    union: 
+      active: {}
+      expired: {}
+      revoked: {}
+
+services:
+  http:
+  
+    TokenService:
+      auth: false
+      base-path: /tokens
+      endpoints:
+
+        create:
+          method: POST
+          path: /create
+          request: CreateTokenRequest
+          response: CreateTokenResponse
+        
+        check: 
+          method: POST
+          path: /verify
+          request: CheckTokenRequest
+          response: boolean
+          errors: 
+            - ClientNotFoundError
+        
+        getTokensByClient: 
+          method: GET
+          path: /ids/{clientId}
+          path-parameters:
+            clientId: ClientId
+          response: list<TokenMetadata>
+          errors: 
+            - ClientNotFoundError
+      
+errors:
+  ClientNotFoundError:
+    http:
+      statusCode: 404
