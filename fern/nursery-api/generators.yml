@@ -1,0 +1,7 @@
+draft:
+  - name: fernapi/fern-java
+    version: 0.0.109
+    config:
+      mode: server
+      serverFrameworks: jersey
+release: []

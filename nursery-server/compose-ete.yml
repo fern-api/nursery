@@ -1,0 +1,6 @@
+version: "3.2"  # optional since v1.27.0
+services:
+  nursery-server:
+    image: nursery-server:latest
+    ports:
+      - 8080:8080

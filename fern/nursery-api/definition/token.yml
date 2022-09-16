@@ -1,0 +1,72 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+types:
+
+  OwnerId: 
+    alias: string
+    docs: Unique id for a token owner.
+
+  TokenId: string
+  
+  CreateTokenRequest:
+    properties: 
+      ownerId: OwnerId
+      description: string
+  
+  CreateTokenResponse: 
+    properties: 
+      token: string
+      tokenId: TokenId
+  
+  GetTokenMetadataRequest: 
+    properties: 
+      token: string
+  
+  TokenMetadata: 
+    properties: 
+      tokenId: TokenId
+      ownerId: OwnerId
+      description: string
+      createdTime: datetime
+      status: TokenStatus
+  
+  TokenStatus: 
+    union: 
+      active: {}
+      expired: {}
+      revoked: {}
+
+services:
+  http:
+  
+    TokenService:
+      auth: false
+      base-path: /tokens
+      endpoints:
+
+        create:
+          method: POST
+          path: /create
+          request: CreateTokenRequest
+          response: CreateTokenResponse
+        
+        getTokenMetadata: 
+          method: POST
+          path: /metadata
+          request: GetTokenMetadataRequest
+          response: TokenMetadata
+          errors: 
+            - TokenNotFoundError
+
+        # add paging
+        getTokensForOwner: 
+          method: GET
+          path: /owner/{ownerId}
+          path-parameters:
+            ownerId: OwnerId
+          response: list<TokenMetadata>
+      
+errors:
+  TokenNotFoundError:
+    http:
+      statusCode: 404

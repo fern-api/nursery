@@ -1,0 +1,18 @@
+# jackson
+com.fasterxml.jackson.core:jackson-core = 2.11.3
+com.fasterxml.jackson.core:jackson-databind = 2.11.3
+
+# dagger
+com.google.dagger:* = 2.35.1
+
+# spring deps
+org.springframework.boot:spring-boot-starter-jersey =  2.6.3
+
+# testing
+org.junit.jupiter:* = 5.5.0
+org.assertj:* = 3.19.0
+org.mockito:* = 3.11.2
+com.palantir.docker.compose:docker-compose-junit-jupiter = 1.7.0
+
+# fern
+com.fern.fern:nursery-api-server-jersey = 0.0.1

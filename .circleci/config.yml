@@ -1,0 +1,181 @@
+version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@3.1.1
+jobs:
+  compile:
+    docker:
+      - image: cimg/openjdk:11.0-node
+    resource_class: medium
+    environment:
+      CIRCLE_TEST_REPORTS: /home/circleci/junit
+      CIRCLE_ARTIFACTS: /home/circleci/artifacts
+      GRADLE_OPTS: -Dorg.gradle.jvmargs='-XX:MaxMetaspaceSize=256m' -Dorg.gradle.workers.max=4
+      _JAVA_OPTIONS: -XX:ActiveProcessorCount=4 -Xmx1177m -XX:MaxMetaspaceSize=512m -XX:ErrorFile=/home/circleci/artifacts/hs_err_pid%p.log -XX:HeapDumpPath=/home/circleci/artifacts
+      TERM: dumb
+    steps:
+      - checkout
+      - restore_cache: { key: 'gradle-wrapper-v2-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}' }
+      - restore_cache: { key: 'compile-gradle-cache-v2-{{ checksum "versions.props" }}-{{ checksum "build.gradle" }}' }
+      - run: ./gradlew --parallel --stacktrace classes testClasses
+      - save_cache:
+          key: 'gradle-wrapper-v2-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}'
+          paths: [ ~/.gradle/wrapper ]
+      - save_cache:
+          key: 'compile-gradle-cache-v2-{{ checksum "versions.props" }}-{{ checksum "build.gradle" }}'
+          paths: [ ~/.gradle/caches ]
+      - persist_to_workspace:
+          root: /home/circleci
+          paths: [ project, .gradle/init.gradle ]
+
+  fern-check:
+    docker:
+      - image: cimg/openjdk:11.0-node
+    resource_class: medium
+    steps:
+      - checkout
+      - run: |
+          sudo npm install -g fern-api
+          fern check
+
+  check:
+    docker:
+      - image: cimg/openjdk:11.0-node
+    resource_class: medium
+    environment:
+      CIRCLE_TEST_REPORTS: /home/circleci/junit
+      CIRCLE_ARTIFACTS: /home/circleci/artifacts
+      GRADLE_OPTS: -Dorg.gradle.jvmargs='-XX:MaxMetaspaceSize=256m' -Dorg.gradle.workers.max=2
+      TERM: dumb
+      _JAVA_OPTIONS: -XX:ActiveProcessorCount=2 -Xmx938m -XX:MaxMetaspaceSize=512m -XX:ErrorFile=/home/circleci/artifacts/hs_err_pid%p.log -XX:HeapDumpPath=/home/circleci/artifacts
+    steps:
+      - attach_workspace: { at: /home/circleci }
+      - restore_cache: { key: 'gradle-wrapper-v2-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}' }
+      - restore_cache: { key: 'check-gradle-cache-v2-{{ checksum "versions.props" }}-{{ checksum "build.gradle" }}' }
+      - run: ./gradlew --parallel --stacktrace --continue check idea -x test
+      - save_cache:
+          key: 'check-gradle-cache-v2-{{ checksum "versions.props" }}-{{ checksum "build.gradle" }}'
+          paths: [ ~/.gradle/caches ]
+      - run:
+          command: mkdir -p ~/junit && find . -type f -regex ".*/build/.*TEST.*xml" -exec cp --parents {} ~/junit/ \;
+          when: always
+      - store_test_results: { path: ~/junit }
+      - store_artifacts: { path: ~/artifacts }
+
+  unit-test:
+    docker:
+      - image: cimg/openjdk:11.0-node
+    resource_class: medium
+    environment:
+      CIRCLE_TEST_REPORTS: /home/circleci/junit
+      CIRCLE_ARTIFACTS: /home/circleci/artifacts
+      GRADLE_OPTS: -Dorg.gradle.jvmargs='-XX:MaxMetaspaceSize=256m' -Dorg.gradle.workers.max=4
+      TERM: dumb
+      _JAVA_OPTIONS: -XX:ActiveProcessorCount=4 -Xmx1177m -XX:MaxMetaspaceSize=512m -XX:ErrorFile=/home/circleci/artifacts/hs_err_pid%p.log -XX:HeapDumpPath=/home/circleci/artifacts
+    steps:
+      - attach_workspace: { at: /home/circleci }
+      - restore_cache: { key: 'gradle-wrapper-v2-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}' }
+      - restore_cache: { key: 'unit-test-gradle-cache-v2-{{ checksum "versions.props" }}-{{ checksum "build.gradle" }}' }
+      - run: ./gradlew --parallel --stacktrace --continue --max-workers=2 test
+      - save_cache:
+          key: 'unit-test-gradle-cache-v2-{{ checksum "versions.props" }}-{{ checksum "build.gradle" }}'
+          paths: [ ~/.gradle/caches ]
+      - run:
+          command: mkdir -p ~/junit && find . -type f -regex ".*/build/.*TEST.*xml" -exec cp --parents {} ~/junit/ \;
+          when: always
+      - store_test_results: { path: ~/junit }
+      - store_artifacts: { path: ~/artifacts }
+
+  build:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: medium
+    environment:
+      CIRCLE_TEST_REPORTS: /home/circleci/junit
+      CIRCLE_ARTIFACTS: /home/circleci/artifacts
+      _JAVA_OPTIONS: -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false -Xmx8192m
+      TERM: dumb
+    steps:
+      - attach_workspace: { at: /home/circleci }
+      - restore_cache: { key: 'gradle-wrapper-v2-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}' }
+      - restore_cache: { key: 'unit-test-gradle-cache-v2-{{ checksum "versions.props" }}-{{ checksum "build.gradle" }}' }
+      - run: docker network prune -f
+      - run: ./gradlew --parallel --stacktrace build -x test -x check
+      - run:
+          command: mkdir -p ~/junit && find . -type f -regex ".*/build/.*TEST.*xml" -exec cp --parents {} ~/junit/ \; || true
+          when: always
+      - store_test_results: { path: ~/junit }
+      - store_artifacts: { path: ~/artifacts }
+
+  deploy-dev:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: medium
+    environment:
+      CIRCLE_TEST_REPORTS: /home/circleci/junit
+      CIRCLE_ARTIFACTS: /home/circleci/artifacts
+      _JAVA_OPTIONS: -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false -Xmx8192m
+      TERM: dumb
+    steps:
+      - attach_workspace: { at: /home/circleci }
+      - restore_cache: { key: 'gradle-wrapper-v2-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}' }
+      - restore_cache: { key: 'unit-test-gradle-cache-v2-{{ checksum "versions.props" }}-{{ checksum "build.gradle" }}' }
+      - aws-cli/setup
+      - run:
+          command: |
+            npm install -g aws-cdk
+            cd fiddle-deploy && cdk deploy fiddle-dev --require-approval never --progress events
+          name: cdk deploy
+
+  deploy-prod:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: medium
+    environment:
+      CIRCLE_TEST_REPORTS: /home/circleci/junit
+      CIRCLE_ARTIFACTS: /home/circleci/artifacts
+      _JAVA_OPTIONS: -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false -Xmx8192m
+      TERM: dumb
+    steps:
+      - attach_workspace: { at: /home/circleci }
+      - restore_cache: { key: 'gradle-wrapper-v2-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}' }
+      - restore_cache: { key: 'unit-test-gradle-cache-v2-{{ checksum "versions.props" }}-{{ checksum "build.gradle" }}' }
+      - aws-cli/setup
+      - run:
+          command: |
+            npm install -g aws-cdk
+            cd fiddle-deploy && cdk deploy fiddle-prod --require-approval never --progress events
+          name: cdk deploy
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - fern-check:
+          filters: { tags: { only: /.*/ } }
+
+      - compile:
+          filters: { tags: { only: /.*/ } }
+          context:
+            - jfrog
+            - aws
+
+      - unit-test:
+          requires: [ compile ]
+          filters: { tags: { only: /.*/ } }
+          context:
+            - jfrog
+            - aws
+
+      - check:
+          requires: [ compile ]
+          filters: { tags: { only: /.*/ } }
+          context:
+            - jfrog
+            - aws
+
+      - build:
+          requires: [ compile ]
+          filters: { tags: { only: /.*/ } }
+          context:
+            - jfrog
+            - aws
