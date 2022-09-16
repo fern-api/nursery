@@ -8,12 +8,6 @@
   - javax.annotation.Nonnull$Checker
   - javax.annotation.RegEx$Checker
   - javax.annotation.meta.When
-[commons-logging:commons-logging, org.springframework:spring-jcl]
-  - org.apache.commons.logging.Log
-  - org.apache.commons.logging.LogFactory
-  - org.apache.commons.logging.LogFactory$1
-  - org.apache.commons.logging.impl.NoOpLog
-  - org.apache.commons.logging.impl.SimpleLog
 [jakarta.ws.rs:jakarta.ws.rs-api, javax.ws.rs:javax.ws.rs-api]
   - javax.ws.rs.client.ClientBuilder
   - javax.ws.rs.client.FactoryFinder

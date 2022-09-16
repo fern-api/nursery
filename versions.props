@@ -7,7 +7,6 @@ com.google.dagger:* = 2.35.1
 
 # spring deps
 org.springframework.boot:spring-boot-starter-jersey =  2.6.3
-org.springframework.boot:spring-boot-starter-actuator = 2.6.3
 
 # testing
 org.junit.jupiter:* = 5.5.0
@@ -16,7 +15,4 @@ org.mockito:* = 3.11.2
 com.palantir.docker.compose:docker-compose-junit-jupiter = 1.7.0
 
 # fern
-com.fern.fern:ir-model = 0.0.59
-
-# api
 com.fern.fern:nursery-api-server-jersey = 0.0.1
