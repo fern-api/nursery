@@ -25,7 +25,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-public final class PostgresTraceDbPublicTests implements BaseNurseryDbTests {
+public final class PostgresNurseryDbPublicTests implements BaseNurseryDbTests {
 
     private static final String POSTGRES_JDBC_URL =
             "jdbc:postgresql://127.0.0.1:15432/postgres?user=postgres&password=quill";
