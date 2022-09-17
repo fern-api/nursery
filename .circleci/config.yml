@@ -189,13 +189,12 @@ workflows:
       - deploy-dev:
           requires: [ compile, unit-test, check, build ]
           filters:
-            tags: { only: /.*/ }
+            branches:
+              only:
+                - main
+            tags:
+              ignore: /.*/
           context:
             - aws
             - fern-dev
             - github
-#            branches:
-#              only:
-#                - main
-#            tags:
-#              ignore: /.*/
