@@ -121,6 +121,9 @@ jobs:
       - restore_cache: { key: 'unit-test-gradle-cache-v2-{{ checksum "versions.props" }}-{{ checksum "build.gradle" }}' }
       - aws-cli/setup
       - run:
+          command: ./gradlew buildDocker
+          name: build docker
+      - run:
           command: |
             cd nursery-cdk 
             npm install
