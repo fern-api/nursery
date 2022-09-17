@@ -189,6 +189,7 @@ workflows:
           context:
             - aws
             - fern-dev
+            - github
 #            branches:
 #              only:
 #                - main
