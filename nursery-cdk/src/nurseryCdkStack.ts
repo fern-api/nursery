@@ -91,7 +91,7 @@ export class NurseryCdkStack extends Stack {
     );
 
     fargateService.targetGroup.configureHealthCheck({
-      healthyHttpCodes: "200",
+      healthyHttpCodes: "200,204",
       path: "/health",
       port: "8080",
     });
