@@ -9,3 +9,5 @@ cdk.out
 
 dev-fern.config.json
 prod-fern.config.json
+
+cdk.context.json

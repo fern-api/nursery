@@ -20,7 +20,7 @@ interface EnvironmentVariables {
 main();
 
 async function main() {
-  const environmentType = process.argv[3];
+  const environmentType = process.argv[2];
   const envVars: EnvironmentVariables = {
     awsAccountId: getEnvVarValueOrThrow("AWS_ACCOUNT_ID"),
     postgresUsername: getEnvVarValueOrThrow("POSTGRES_USERNAME"),

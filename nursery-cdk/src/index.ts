@@ -2,7 +2,7 @@ import { App, Stack } from "aws-cdk-lib";
 import { readFileSync } from "fs";
 import { resolve } from "path";
 import { NurseryInfraConfig } from "./config";
-import { NurseryCdkStack } from "./nursery-cdk-stack";
+import { NurseryCdkStack } from "./nurseryCdkStack";
 
 export function main(context?: Record<string, string>): void {
   const app = new App({ context });

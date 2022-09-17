@@ -122,8 +122,10 @@ jobs:
       - aws-cli/setup
       - run:
           command: |
-            npm install -g aws-cdk
-            cd fiddle-deploy && cdk deploy fiddle-dev --require-approval never --progress events
+            cd nursery-cdk 
+            npm install
+            npm run gen:fern:config dev
+            npm run cdk deploy -c config=dev-fern.config.json --require-approval never --progress events
           name: cdk deploy
 
   deploy-prod:
@@ -179,3 +181,16 @@ workflows:
           context:
             - jfrog
             - aws
+
+      - deploy-dev:
+          requires: [ compile, unit-test, check, build ]
+          filters:
+            tags: { only: /.*/ }
+          context:
+            - aws
+            - fern-dev
+#            branches:
+#              only:
+#                - main
+#            tags:
+#              ignore: /.*/

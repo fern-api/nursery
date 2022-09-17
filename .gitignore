@@ -40,3 +40,5 @@ build
 
 # CDK
 cdk.out/
+
+dockers/
