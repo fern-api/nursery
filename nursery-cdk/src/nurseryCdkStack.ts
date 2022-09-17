@@ -61,8 +61,8 @@ export class NurseryCdkStack extends Stack {
         taskImageOptions: {
           image: ContainerImage.fromTarball(`../dockers/nursery-server.tar`),
           environment: {
-            JDBC_URL: `jdbc:postgresql://${config.databaseConfig.postgresHostname}:5432/postgres?user=${config.databaseConfig.postgresUsername}&password=${config.databaseConfig.postgresPassword}`,
-            MAINTENANCE_JDBC_URL: `jdbc:postgresql://${config.databaseConfig.postgresHostname}:5432/nursery?user=${config.databaseConfig.postgresUsername}&password=${config.databaseConfig.postgresPassword}`,
+            MAINTENANCE_JDBC_URL: `jdbc:postgresql://${config.databaseConfig.postgresHostname}:5432/postgres?user=${config.databaseConfig.postgresUsername}&password=${config.databaseConfig.postgresPassword}`,
+            JDBC_URL: `jdbc:postgresql://${config.databaseConfig.postgresHostname}:5432/nursery?user=${config.databaseConfig.postgresUsername}&password=${config.databaseConfig.postgresPassword}`,
           },
           containerName: "nursery-server",
           containerPort: 8080,
