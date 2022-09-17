@@ -61,3 +61,11 @@ allprojects {
         }
     }
 }
+
+task buildDocker {
+    doLast {
+        exec {
+            commandLine './build_dockers.sh', "${project.version}"
+        }
+    }
+}
