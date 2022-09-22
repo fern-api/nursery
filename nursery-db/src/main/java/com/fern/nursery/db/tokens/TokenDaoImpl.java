@@ -16,6 +16,7 @@
 
 package com.fern.nursery.db.tokens;
 
+import com.fern.nursery.db.owners.OwnerNotFoundException;
 import com.fern.nursery.sql.public_.Tables;
 import com.google.common.hash.Hashing;
 import java.nio.charset.StandardCharsets;
@@ -28,6 +29,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.jooq.DSLContext;
+import org.jooq.Record1;
 import org.jooq.Record4;
 import org.jooq.Result;
 import org.slf4j.Logger;
@@ -47,7 +49,8 @@ public final class TokenDaoImpl implements TokenDao {
     }
 
     @Override
-    public CreatedToken createToken(String ownerId, Optional<String> description) {
+    public CreatedToken createToken(String ownerId, Optional<String> description) throws OwnerNotFoundException {
+        checkIfOwnerExists(ownerId);
         String tokenId = UUID.randomUUID().toString();
         String token = generateToken();
         String sha256 =
@@ -90,7 +93,8 @@ public final class TokenDaoImpl implements TokenDao {
     }
 
     @Override
-    public List<TokenInfo> getTokensForOwner(String ownerId) {
+    public List<TokenInfo> getTokensForOwner(String ownerId) throws OwnerNotFoundException {
+        checkIfOwnerExists(ownerId);
         Result<Record4<String, String, LocalDateTime, String>> rows = transactionContext
                 .select(
                         Tables.TOKENS.OWNER_ID,
@@ -114,5 +118,16 @@ public final class TokenDaoImpl implements TokenDao {
         byte[] randomBytes = new byte[24]; // length could be configurable
         SECURE_RANDOM.nextBytes(randomBytes);
         return BASE64_ENCODER.encodeToString(randomBytes);
+    }
+
+    private void checkIfOwnerExists(String ownerId) throws OwnerNotFoundException {
+        Record1<String> ownerRow = transactionContext
+                .select(Tables.OWNERS.OWNER_ID)
+                .from(Tables.OWNERS)
+                .where(Tables.OWNERS.OWNER_ID.eq(ownerId))
+                .fetchOne();
+        if (ownerRow == null) {
+            throw new OwnerNotFoundException();
+        }
     }
 }

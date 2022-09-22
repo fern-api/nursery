@@ -22,6 +22,8 @@ dependencies {
         exclude module: 'logback-classic'
     }
     implementation 'com.google.guava:guava'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
 
     annotationProcessor 'org.immutables:value'
     compileOnly 'org.immutables:value::annotations'

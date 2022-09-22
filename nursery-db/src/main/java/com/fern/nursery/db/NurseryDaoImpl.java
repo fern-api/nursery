@@ -16,19 +16,28 @@
 
 package com.fern.nursery.db;
 
+import com.fern.nursery.db.owners.OwnerDao;
+import com.fern.nursery.db.owners.OwnerDaoImpl;
 import com.fern.nursery.db.tokens.TokenDao;
 import com.fern.nursery.db.tokens.TokenDaoImpl;
 import org.jooq.DSLContext;
 
 public final class NurseryDaoImpl implements NurseryDao {
     private final TokenDao tokenDao;
+    private final OwnerDao ownerDao;
 
     public NurseryDaoImpl(DSLContext transactionContext) {
         this.tokenDao = new TokenDaoImpl(transactionContext);
+        this.ownerDao = new OwnerDaoImpl(transactionContext);
     }
 
     @Override
     public TokenDao tokenDao() {
         return tokenDao;
+    }
+
+    @Override
+    public OwnerDao ownerDao() {
+        return ownerDao;
     }
 }

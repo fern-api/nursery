@@ -1,16 +1,15 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
 
-types:
+imports:
+  owner: owner.yml
 
-  OwnerId: 
-    alias: string
-    docs: Unique id for a token owner.
+types:
 
   TokenId: string
   
   CreateTokenRequest:
     properties: 
-      ownerId: OwnerId
+      ownerId: owner.OwnerId
       description: optional<string>
   
   CreateTokenResponse: 
@@ -25,7 +24,7 @@ types:
   TokenMetadata: 
     properties: 
       tokenId: TokenId
-      ownerId: OwnerId
+      ownerId: owner.OwnerId
       description: optional<string>
       createdTime: datetime
       status: TokenStatus
@@ -49,6 +48,8 @@ services:
           path: /create
           request: CreateTokenRequest
           response: CreateTokenResponse
+          errors:
+            - owner.OwnerNotFoundError
         
         getTokenMetadata: 
           method: POST
@@ -63,8 +64,10 @@ services:
           method: GET
           path: /owner/{ownerId}
           path-parameters:
-            ownerId: OwnerId
+            ownerId: owner.OwnerId
           response: list<TokenMetadata>
+          errors:
+            - owner.OwnerNotFoundError
       
 errors:
   TokenNotFoundError:

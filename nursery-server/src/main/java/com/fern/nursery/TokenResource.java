@@ -16,22 +16,28 @@
 
 package com.fern.nursery;
 
+import com.fern.nursery.api.model.owner.OwnerId;
+import com.fern.nursery.api.model.owner.OwnerNotFoundError;
+import com.fern.nursery.api.model.owner.OwnerNotFoundErrorBody;
 import com.fern.nursery.api.model.token.CreateTokenRequest;
 import com.fern.nursery.api.model.token.CreateTokenResponse;
 import com.fern.nursery.api.model.token.GetTokenMetadataRequest;
-import com.fern.nursery.api.model.token.OwnerId;
 import com.fern.nursery.api.model.token.TokenId;
 import com.fern.nursery.api.model.token.TokenMetadata;
 import com.fern.nursery.api.model.token.TokenNotFoundError;
 import com.fern.nursery.api.model.token.TokenNotFoundErrorBody;
 import com.fern.nursery.api.model.token.TokenStatus;
 import com.fern.nursery.api.server.token.TokenService;
+import com.fern.nursery.db.NurseryDao;
 import com.fern.nursery.db.NurseryDatabase;
+import com.fern.nursery.db.owners.OwnerNotFoundException;
 import com.fern.nursery.db.tokens.CreatedToken;
 import com.fern.nursery.db.tokens.TokenInfo;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -47,13 +53,22 @@ public final class TokenResource implements TokenService {
     }
 
     @Override
-    public CreateTokenResponse create(CreateTokenRequest request) {
-        CreatedToken createdToken = nurseryDatabase.inTransactionResult(nurseryDao ->
-                nurseryDao.tokenDao().createToken(request.getOwnerId().get(), request.getDescription()));
-        return CreateTokenResponse.builder()
-                .token(createdToken.token())
-                .tokenId(TokenId.of(createdToken.tokenId()))
-                .build();
+    public CreateTokenResponse create(CreateTokenRequest request) throws OwnerNotFoundError {
+        return nurseryDatabase
+                .inTransactionResult((Function<NurseryDao, Optional<CreatedToken>>) nurseryDao -> {
+                    try {
+                        return Optional.of(nurseryDao
+                                .tokenDao()
+                                .createToken(request.getOwnerId().get(), request.getDescription()));
+                    } catch (OwnerNotFoundException e) {
+                        return Optional.empty();
+                    }
+                })
+                .map(createdToken -> CreateTokenResponse.builder()
+                        .token(createdToken.token())
+                        .tokenId(TokenId.of(createdToken.tokenId()))
+                        .build())
+                .orElseThrow(() -> new OwnerNotFoundError(OwnerNotFoundErrorBody.of()));
     }
 
     @Override
@@ -65,12 +80,19 @@ public final class TokenResource implements TokenService {
     }
 
     @Override
-    public List<TokenMetadata> getTokensForOwner(OwnerId ownerId) {
+    public List<TokenMetadata> getTokensForOwner(OwnerId ownerId) throws OwnerNotFoundError {
         return nurseryDatabase
-                .inTransactionResult(nurseryDao -> nurseryDao.tokenDao().getTokensForOwner(ownerId.get()))
-                .stream()
-                .map(TokenResource::convertToTokenMetadata)
-                .collect(Collectors.toList());
+                .inTransactionResult((Function<NurseryDao, Optional<List<TokenInfo>>>) nurseryDao -> {
+                    try {
+                        return Optional.of(nurseryDao.tokenDao().getTokensForOwner(ownerId.get()));
+                    } catch (OwnerNotFoundException e) {
+                        return Optional.empty();
+                    }
+                })
+                .map(tokenInfos -> tokenInfos.stream()
+                        .map(TokenResource::convertToTokenMetadata)
+                        .collect(Collectors.toList()))
+                .orElseThrow(() -> new OwnerNotFoundError(OwnerNotFoundErrorBody.of()));
     }
 
     private static TokenMetadata convertToTokenMetadata(TokenInfo tokenInfo) {
