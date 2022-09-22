@@ -1,0 +1,58 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+types:
+
+  OwnerId:
+    alias: string
+    docs: Unique id for an owner.
+
+  CreateOwnerRequest:
+    properties:
+      ownerId: OwnerId
+      data: unknown
+
+  UpdateOwnerRequest:
+    properties:
+      data: unknown
+
+  Owner:
+    properties:
+      ownerId: OwnerId
+      data: unknown
+
+services:
+  http:
+
+    OwnerService:
+      auth: false
+      base-path: /owner
+      endpoints:
+
+        create:
+          method: POST
+          path: /
+          request: CreateOwnerRequest
+
+        get:
+          method: GET
+          path: /{ownerId}
+          path-parameters:
+            ownerId: OwnerId
+          response: Owner
+          errors:
+            - OwnerNotFoundError
+
+        update:
+          method: PUT
+          path: /{ownerId}
+          path-parameters:
+            ownerId: OwnerId
+          request: UpdateOwnerRequest
+          response: Owner
+          errors:
+            - OwnerNotFoundError
+
+errors:
+  OwnerNotFoundError:
+    http:
+      statusCode: 404

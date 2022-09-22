@@ -16,10 +16,11 @@
 
 package com.fern.nursery;
 
+import com.fern.nursery.api.model.owner.OwnerId;
+import com.fern.nursery.api.model.owner.OwnerNotFoundError;
 import com.fern.nursery.api.model.token.CreateTokenRequest;
 import com.fern.nursery.api.model.token.CreateTokenResponse;
 import com.fern.nursery.api.model.token.GetTokenMetadataRequest;
-import com.fern.nursery.api.model.token.OwnerId;
 import com.fern.nursery.api.model.token.TokenId;
 import com.fern.nursery.api.model.token.TokenMetadata;
 import com.fern.nursery.api.model.token.TokenNotFoundError;
@@ -49,7 +50,7 @@ public class TokenResourceTest {
     }
 
     @Test
-    public void test_createAndGetToken() throws TokenNotFoundError {
+    public void test_createAndGetToken() throws TokenNotFoundError, OwnerNotFoundError {
         OwnerId ownerFoo = OwnerId.of("foo");
         String description = "My token!";
         CreateTokenResponse createTokenResponse = tokenResource.create(CreateTokenRequest.builder()
@@ -66,7 +67,7 @@ public class TokenResourceTest {
     }
 
     @Test
-    public void test_getTokensForOwner() {
+    public void test_getTokensForOwner() throws OwnerNotFoundError {
         OwnerId ownerFoo = OwnerId.of("foo");
         CreateTokenResponse tokenOne = tokenResource.create(
                 CreateTokenRequest.builder().ownerId(ownerFoo).build());

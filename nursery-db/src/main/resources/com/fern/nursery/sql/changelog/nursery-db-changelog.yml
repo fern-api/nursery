@@ -43,3 +43,20 @@ databaseChangeLog:
               - column:
                   name: description
                   type: varchar(10000)
+
+  - changeSet:
+      id: 2
+      author: deep@buildwithfern.com
+      changes:
+        - createTable:
+            tableName: owners
+            columns:
+              - column:
+                  name: owner_id
+                  type: varchar(255)
+                  constraints:
+                    - nullable: false
+                      primaryKey: true
+              - column:
+                  name: data
+                  type: ${attribute_bytes_type}

@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package com.fern.nursery.db.tokens;
+package com.fern.nursery.db.owners;
 
-import com.fern.nursery.db.owners.OwnerNotFoundException;
-import java.util.List;
-import java.util.Optional;
+public interface OwnerDao {
 
-public interface TokenDao {
+    void createOwner(String ownerId, Object data);
 
-    /**
-     * Creates and persists a new token.
-     * @param ownerId owner of generated token
-     * @param description description associated with token
-     * @return tokenId
-     */
-    CreatedToken createToken(String ownerId, Optional<String> description) throws OwnerNotFoundException;
+    DbOwner getOwner(String ownerId) throws OwnerNotFoundException;
 
-    Optional<TokenInfo> getToken(String token);
-
-    List<TokenInfo> getTokensForOwner(String ownerId) throws OwnerNotFoundException;
+    DbOwner updateOwner(String ownerId, Object data) throws OwnerNotFoundException;
 }

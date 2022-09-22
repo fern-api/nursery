@@ -16,9 +16,12 @@
 
 package com.fern.nursery.db;
 
+import com.fern.nursery.db.owners.OwnerDao;
 import com.fern.nursery.db.tokens.TokenDao;
 
 public interface NurseryDao {
 
     TokenDao tokenDao();
+
+    OwnerDao ownerDao();
 }

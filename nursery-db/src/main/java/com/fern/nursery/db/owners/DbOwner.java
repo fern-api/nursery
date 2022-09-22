@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package com.fern.nursery.db.tokens;
+package com.fern.nursery.db.owners;
 
-import com.fern.nursery.db.owners.OwnerNotFoundException;
-import java.util.List;
-import java.util.Optional;
+import com.fern.nursery.db.StagedImmutablesStyle;
+import org.immutables.value.Value;
 
-public interface TokenDao {
+@Value.Immutable
+@StagedImmutablesStyle
+public interface DbOwner {
 
-    /**
-     * Creates and persists a new token.
-     * @param ownerId owner of generated token
-     * @param description description associated with token
-     * @return tokenId
-     */
-    CreatedToken createToken(String ownerId, Optional<String> description) throws OwnerNotFoundException;
+    String ownerId();
 
-    Optional<TokenInfo> getToken(String token);
+    Object data();
 
-    List<TokenInfo> getTokensForOwner(String ownerId) throws OwnerNotFoundException;
+    static ImmutableDbOwner.OwnerIdBuildStage builder() {
+        return ImmutableDbOwner.builder();
+    }
 }
