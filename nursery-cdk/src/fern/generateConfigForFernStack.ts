@@ -5,7 +5,7 @@
 import {
   EnvironmentInfo,
   Environments,
-} from "@fern-fern/fern-cloud-resources-api-client/model";
+} from "@fern-fern/fern-cloud-client/model/environments";
 import axios from "axios";
 import { writeFileSync } from "fs";
 import { NurseryInfraConfig } from "../config";
@@ -43,6 +43,11 @@ async function main() {
       postgresHostname: envVars.postgresHost,
       postgresUsername: envVars.postgresUsername,
       postgresPassword: envVars.postgresPassword,
+    },
+    cloudmapConfig: {
+      cloudmapArn: environmentInfo.cloudMapNamespaceInfo.namespaceArn,
+      cloudmapId: environmentInfo.cloudMapNamespaceInfo.namespaceId,
+      cloudmapName: environmentInfo.cloudMapNamespaceInfo.namespaceName,
     },
   };
   writeFileSync(`${environmentType}-fern.config.json`, JSON.stringify(config));

@@ -9,9 +9,16 @@ export interface NurseryInfraConfig {
   readonly route53HostedZoneName: string;
   readonly domainName: string;
   readonly certificateArn: string;
+  readonly cloudmapConfig: CloudMapConfig | undefined;
 
   // TODO: Should support setting up database if it doesn't exist already
   readonly databaseConfig: ExistingDatabaseConfig;
+}
+
+export interface CloudMapConfig {
+  cloudmapName: string;
+  cloudmapId: string;
+  cloudmapArn: string;
 }
 
 export interface ExistingDatabaseConfig {
