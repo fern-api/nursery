@@ -6,6 +6,10 @@ import { ApplicationLoadBalancedFargateService } from "aws-cdk-lib/aws-ecs-patte
 import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { LogGroup } from "aws-cdk-lib/aws-logs";
 import { HostedZone } from "aws-cdk-lib/aws-route53";
+import {
+  HttpNamespace,
+  IHttpNamespace,
+} from "aws-cdk-lib/aws-servicediscovery";
 import { Construct } from "constructs";
 import { NurseryInfraConfig } from "./config";
 
@@ -48,6 +52,20 @@ export class NurseryCdkStack extends Stack {
       config.certificateArn
     );
 
+    let cloudMapNamespace: IHttpNamespace | undefined = undefined;
+
+    if (config.cloudmapConfig != null) {
+      cloudMapNamespace = HttpNamespace.fromHttpNamespaceAttributes(
+        this,
+        "cloudmap",
+        {
+          namespaceArn: config.cloudmapConfig.cloudmapArn,
+          namespaceId: config.cloudmapConfig.cloudmapId,
+          namespaceName: config.cloudmapConfig.cloudmapName,
+        }
+      );
+    }
+
     const fargateService = new ApplicationLoadBalancedFargateService(
       this,
       SERVICE_NAME,
@@ -82,6 +100,13 @@ export class NurseryCdkStack extends Stack {
           zoneName: config.route53HostedZoneName,
         }),
         domainName: config.domainName,
+        cloudMapOptions:
+          cloudMapNamespace != null
+            ? {
+                cloudMapNamespace,
+                name: SERVICE_NAME,
+              }
+            : undefined,
       }
     );
 
