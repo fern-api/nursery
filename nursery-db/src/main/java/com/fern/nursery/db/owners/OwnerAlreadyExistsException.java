@@ -16,11 +16,5 @@
 
 package com.fern.nursery.db.owners;
 
-public interface OwnerDao {
-
-    void createOwner(String ownerId, Object data) throws OwnerAlreadyExistsException;
-
-    DbOwner getOwner(String ownerId) throws OwnerNotFoundException;
-
-    DbOwner updateOwner(String ownerId, Object data) throws OwnerNotFoundException;
+public class OwnerAlreadyExistsException extends Exception {
 }

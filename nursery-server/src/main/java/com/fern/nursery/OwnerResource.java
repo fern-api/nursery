@@ -18,6 +18,8 @@ package com.fern.nursery;
 
 import com.fern.nursery.api.model.owner.CreateOwnerRequest;
 import com.fern.nursery.api.model.owner.Owner;
+import com.fern.nursery.api.model.owner.OwnerAlreadyExistsError;
+import com.fern.nursery.api.model.owner.OwnerAlreadyExistsErrorBody;
 import com.fern.nursery.api.model.owner.OwnerId;
 import com.fern.nursery.api.model.owner.OwnerNotFoundError;
 import com.fern.nursery.api.model.owner.OwnerNotFoundErrorBody;
@@ -25,6 +27,7 @@ import com.fern.nursery.api.model.owner.UpdateOwnerRequest;
 import com.fern.nursery.api.server.owner.OwnerService;
 import com.fern.nursery.db.NurseryDatabase;
 import com.fern.nursery.db.owners.DbOwner;
+import com.fern.nursery.db.owners.OwnerAlreadyExistsException;
 import com.fern.nursery.db.owners.OwnerNotFoundException;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -41,10 +44,18 @@ public final class OwnerResource implements OwnerService {
     }
 
     @Override
-    public void create(CreateOwnerRequest request) {
-        nurseryDatabase.inTransaction(nurseryDao -> {
-            nurseryDao.ownerDao().createOwner(request.getOwnerId().get(), request.getData());
+    public void create(CreateOwnerRequest request) throws OwnerAlreadyExistsError {
+        Optional<String> maybeCreateResponse = nurseryDatabase.inTransactionResult(nurseryDao -> {
+            try {
+                nurseryDao.ownerDao().createOwner(request.getOwnerId().get(), request.getData());
+                return Optional.of("dummy");
+            } catch (OwnerAlreadyExistsException e) {
+                return Optional.empty();
+            }
         });
+        if (maybeCreateResponse.isEmpty()) {
+            throw new OwnerAlreadyExistsError(OwnerAlreadyExistsErrorBody.of());
+        }
     }
 
     @Override

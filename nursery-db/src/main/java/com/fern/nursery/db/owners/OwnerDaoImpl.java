@@ -23,6 +23,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fern.nursery.sql.public_.Tables;
 import java.io.IOException;
 import org.jooq.DSLContext;
+import org.jooq.Record1;
 import org.jooq.Record2;
 
 public final class OwnerDaoImpl implements OwnerDao {
@@ -37,7 +38,15 @@ public final class OwnerDaoImpl implements OwnerDao {
     }
 
     @Override
-    public void createOwner(String ownerId, Object data) {
+    public void createOwner(String ownerId, Object data) throws OwnerAlreadyExistsException {
+        Record1<String> maybeExistingOwner = transactionContext
+                .select(Tables.OWNERS.OWNER_ID)
+                .from(Tables.OWNERS)
+                .where(Tables.OWNERS.OWNER_ID.eq(ownerId))
+                .fetchOne();
+        if (maybeExistingOwner != null) {
+            throw new OwnerAlreadyExistsException();
+        }
         transactionContext
                 .insertInto(Tables.OWNERS, Tables.OWNERS.OWNER_ID, Tables.OWNERS.DATA)
                 .values(ownerId, serializeToBytes(data))
