@@ -9,6 +9,8 @@ import { HostedZone } from "aws-cdk-lib/aws-route53";
 import {
   HttpNamespace,
   IHttpNamespace,
+  IPrivateDnsNamespace,
+  PrivateDnsNamespace,
 } from "aws-cdk-lib/aws-servicediscovery";
 import { Construct } from "constructs";
 import { NurseryInfraConfig } from "./config";
@@ -52,12 +54,12 @@ export class NurseryCdkStack extends Stack {
       config.certificateArn
     );
 
-    let cloudMapNamespace: IHttpNamespace | undefined = undefined;
+    let cloudMapNamespace: IPrivateDnsNamespace | undefined = undefined;
 
     if (config.cloudmapConfig != null) {
-      cloudMapNamespace = HttpNamespace.fromHttpNamespaceAttributes(
+      cloudMapNamespace = PrivateDnsNamespace.fromPrivateDnsNamespaceAttributes(
         this,
-        "cloudmap",
+        "private-cloudmap",
         {
           namespaceArn: config.cloudmapConfig.cloudmapArn,
           namespaceId: config.cloudmapConfig.cloudmapId,
