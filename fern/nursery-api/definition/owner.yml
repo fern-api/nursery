@@ -32,6 +32,8 @@ services:
           method: POST
           path: /
           request: CreateOwnerRequest
+          errors:
+            -  OwnerAlreadyExistsError
 
         get:
           method: GET
@@ -53,6 +55,9 @@ services:
             - OwnerNotFoundError
 
 errors:
+  OwnerAlreadyExistsError:
+    http:
+      statusCode: 400
   OwnerNotFoundError:
     http:
       statusCode: 404
