@@ -16,5 +16,4 @@
 
 package com.fern.nursery.db.owners;
 
-public class OwnerAlreadyExistsException extends Exception {
-}
+public class OwnerAlreadyExistsException extends Exception {}
