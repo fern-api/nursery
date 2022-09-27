@@ -36,6 +36,8 @@ export class NurseryCdkStack extends Stack {
       allowAllOutbound: true,
     });
 
+    nurserySg.addIngressRule(Peer.ipv4("172.31.0.0/16"), Port.allTcp());
+
     const cluster = Cluster.fromClusterAttributes(this, "cluster", {
       clusterName: config.ecsClusterName,
       vpc,
