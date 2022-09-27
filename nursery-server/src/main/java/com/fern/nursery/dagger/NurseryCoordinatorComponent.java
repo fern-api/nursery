@@ -22,7 +22,6 @@ import com.fern.nursery.TokenResource;
 import com.fern.nursery.config.NurseryConfig;
 import dagger.BindsInstance;
 import dagger.Component;
-
 import javax.inject.Singleton;
 
 @Singleton
