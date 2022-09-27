@@ -28,5 +28,6 @@ public final class ServiceRegistry extends AbstractServiceRegistry {
         register(CorsResponseFilter.class);
         register(nurseryCoordinatorComponent.getTokenResource());
         register(nurseryCoordinatorComponent.getHealthResource());
+        register(nurseryCoordinatorComponent.getOwnerResource());
     }
 }

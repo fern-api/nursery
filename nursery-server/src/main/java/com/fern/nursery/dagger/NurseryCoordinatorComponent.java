@@ -17,10 +17,12 @@
 package com.fern.nursery.dagger;
 
 import com.fern.nursery.HealthResource;
+import com.fern.nursery.OwnerResource;
 import com.fern.nursery.TokenResource;
 import com.fern.nursery.config.NurseryConfig;
 import dagger.BindsInstance;
 import dagger.Component;
+
 import javax.inject.Singleton;
 
 @Singleton
@@ -30,6 +32,8 @@ public interface NurseryCoordinatorComponent {
     TokenResource getTokenResource();
 
     HealthResource getHealthResource();
+
+    OwnerResource getOwnerResource();
 
     @Component.Builder
     interface Builder {
