@@ -115,7 +115,7 @@ jobs:
       CIRCLE_ARTIFACTS: /home/circleci/artifacts
       _JAVA_OPTIONS: -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false -Xmx8192m
       TERM: dumb
-    resource_class: small
+    resource_class: medium
     steps:
       - attach_workspace: { at: /home/circleci }
       - restore_cache: { key: 'gradle-wrapper-v2-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}' }
@@ -132,7 +132,7 @@ jobs:
   deploy-dev:
     machine:
       image: ubuntu-2004:current
-    resource_class: small
+    resource_class: medium
     environment:
       CIRCLE_TEST_REPORTS: /home/circleci/junit
       CIRCLE_ARTIFACTS: /home/circleci/artifacts
@@ -158,7 +158,7 @@ jobs:
   deploy-prod:
     machine:
       image: ubuntu-2004:current
-    resource_class: small
+    resource_class: medium
     environment:
       CIRCLE_TEST_REPORTS: /home/circleci/junit
       CIRCLE_ARTIFACTS: /home/circleci/artifacts
