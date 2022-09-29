@@ -239,7 +239,7 @@ workflows:
           context:
             - jfrog
             - aws
-            - github
+            - fern-prod
 
       - publish-docker:
           requires: [ check, unit-test, build ]
