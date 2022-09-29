@@ -176,7 +176,7 @@ jobs:
           command: |
             cd nursery-cdk 
             npm install
-            npm run gen:fern:config dev
+            npm run gen:fern:config prod
             npm install -g aws-cdk
             cdk deploy -c config=prod-fern.config.json --require-approval never --progress events
           name: cdk deploy
