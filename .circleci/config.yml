@@ -170,9 +170,15 @@ jobs:
       - restore_cache: { key: 'unit-test-gradle-cache-v2-{{ checksum "versions.props" }}-{{ checksum "build.gradle" }}' }
       - aws-cli/setup
       - run:
+          command: ./gradlew buildDocker
+          name: build docker
+      - run:
           command: |
+            cd nursery-cdk 
+            npm install
+            npm run gen:fern:config dev
             npm install -g aws-cdk
-            cd fiddle-deploy && cdk deploy fiddle-prod --require-approval never --progress events
+            cdk deploy -c config=prod-fern.config.json --require-approval never --progress events
           name: cdk deploy
 
 workflows:
@@ -220,6 +226,19 @@ workflows:
           context:
             - aws
             - fern-dev
+            - github
+
+      - deploy-prod:
+          requires: [ compile, unit-test, check, build ]
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only:
+                - /.*/
+          context:
+            - jfrog
+            - aws
             - github
 
       - publish-docker:
