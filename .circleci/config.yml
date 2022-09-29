@@ -237,9 +237,9 @@ workflows:
               only:
                 - /.*/
           context:
-            - jfrog
             - aws
             - fern-prod
+            - github
 
       - publish-docker:
           requires: [ check, unit-test, build ]
