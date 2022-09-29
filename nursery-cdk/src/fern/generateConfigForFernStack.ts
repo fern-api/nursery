@@ -37,7 +37,7 @@ async function main() {
     logGroupName: environmentInfo.logGroupInfo.logGroupName,
     route53HostedZoneId: environmentInfo.route53Info.hostedZoneId,
     route53HostedZoneName: environmentInfo.route53Info.hostedZoneName,
-    domainName: `nursery-dev.buildwithfern.com`,
+    domainName: getServiceDomainName(environmentType, environmentInfo),
     certificateArn: environmentInfo.route53Info.certificateArn,
     databaseConfig: {
       postgresHostname: envVars.postgresHost,
@@ -51,6 +51,18 @@ async function main() {
     },
   };
   writeFileSync(`${environmentType}-fern.config.json`, JSON.stringify(config));
+}
+
+function getServiceDomainName(
+  environmentType: string,
+  environmentInfo: EnvironmentInfo
+) {
+  if (environmentType === "prod") {
+    return `nursery.${environmentInfo.route53Info.hostedZoneName}`;
+  }
+  return `nursery-${environmentType.toLowerCase()}.${
+    environmentInfo.route53Info.hostedZoneName
+  }`;
 }
 
 function getEnvVarValueOrThrow(environmentVariableName: string): string {
