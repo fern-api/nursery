@@ -6,23 +6,23 @@ imports:
 types:
 
   TokenId: string
-  
+
   CreateTokenRequest:
-    properties: 
+    properties:
       ownerId: owner.OwnerId
       description: optional<string>
-  
-  CreateTokenResponse: 
-    properties: 
+
+  CreateTokenResponse:
+    properties:
       token: string
       tokenId: TokenId
-  
-  GetTokenMetadataRequest: 
-    properties: 
+
+  GetTokenMetadataRequest:
+    properties:
       token: string
-  
-  TokenMetadata: 
-    properties: 
+
+  TokenMetadata:
+    properties:
       tokenId: TokenId
       ownerId: owner.OwnerId
       description: optional<string>
@@ -37,7 +37,7 @@ types:
 
 services:
   http:
-  
+
     TokenService:
       auth: false
       base-path: /tokens
@@ -50,17 +50,17 @@ services:
           response: CreateTokenResponse
           errors:
             - owner.OwnerNotFoundError
-        
-        getTokenMetadata: 
+
+        getTokenMetadata:
           method: POST
           path: /metadata
           request: GetTokenMetadataRequest
           response: TokenMetadata
-          errors: 
+          errors:
             - TokenNotFoundError
 
         # add paging
-        getTokensForOwner: 
+        getTokensForOwner:
           method: GET
           path: /owner/{ownerId}
           path-parameters:
@@ -68,7 +68,7 @@ services:
           response: list<TokenMetadata>
           errors:
             - owner.OwnerNotFoundError
-      
+
 errors:
   TokenNotFoundError:
     http:
