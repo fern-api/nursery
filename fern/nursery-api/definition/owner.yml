@@ -33,7 +33,7 @@ services:
           path: /
           request: CreateOwnerRequest
           errors:
-            -  OwnerAlreadyExistsError
+            - OwnerAlreadyExistsError
 
         get:
           method: GET
