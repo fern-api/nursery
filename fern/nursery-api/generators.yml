@@ -7,7 +7,7 @@ draft:
     mode: publish
 release:
   - name: fernapi/fern-typescript-sdk
-    version: 0.0.199
+    version: 0.0.206
     outputs:
       github:
         repository: fern-api/nursery-node
