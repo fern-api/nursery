@@ -28,9 +28,9 @@ types:
       description: optional<string>
       createdTime: datetime
       status: TokenStatus
-  
-  TokenStatus: 
-    union: 
+
+  TokenStatus:
+    union:
       active: {}
       expired: {}
       revoked: {}
@@ -71,5 +71,4 @@ services:
 
 errors:
   TokenNotFoundError:
-    http:
-      statusCode: 404
+    status-code: 404
