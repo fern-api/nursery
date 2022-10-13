@@ -1,8 +1,9 @@
 name: ci
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - '*.**'
 
 jobs:
   release:
