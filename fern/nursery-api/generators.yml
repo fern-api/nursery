@@ -11,5 +11,6 @@ release:
     publishing:
       npm:
         package-name: "@fern-api/nursery"
+        token: ${NPM_TOKEN}
     github:
       repository: fern-api/nursery-node
