@@ -16,4 +16,6 @@ jobs:
         uses: actions/setup-node@v2
 
       - name: Release SDKs
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx fern-api release ${{github.ref_name}} --log-level debug
