@@ -9,9 +9,7 @@ types:
   CreateOwnerRequest:
     properties:
       ownerId: OwnerId
-      data:
-        type: unknown
-        docs: Store arbitrary data about the owner.
+      data: unknown
 
   UpdateOwnerRequest:
     properties:

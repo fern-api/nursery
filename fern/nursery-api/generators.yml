@@ -10,7 +10,7 @@ release:
     version: 0.0.209
     publishing:
       npm:
-        package-name: "@fern-api/nursery"
+        package-name: '@fern-api/nursery'
         token: ${NPM_TOKEN}
     github:
       repository: fern-api/nursery-node
