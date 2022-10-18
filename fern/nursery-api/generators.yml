@@ -20,3 +20,10 @@ release:
         token: ${NPM_TOKEN}
     github:
       repository: fern-api/nursery-node
+  - name: fernapi/fern-java-sdk
+    version: 0.0.117
+    publishing:
+      maven:
+        coordinate: 'io.github.fern-api:nursery-api'
+    github:
+      repository: fern-api/nursery-java
