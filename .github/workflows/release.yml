@@ -24,7 +24,7 @@ jobs:
       - name: Print Version
         env:
           TERM: dumb
-        run:
+        run: |
           VERSION=$(./gradlew printVersion --quiet)
           echo $VERSION
 
