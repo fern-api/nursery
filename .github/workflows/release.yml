@@ -26,7 +26,8 @@ jobs:
           TERM: dumb
         run: |
           VERSION=$(./gradlew printVersion --quiet)
-          echo $VERSION
+          echo "$VERSION"
+          echo "$VERSION"
 
 #      - name: Release SDKs
 #        env:
