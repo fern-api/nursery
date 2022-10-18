@@ -25,13 +25,11 @@ jobs:
         env:
           TERM: dumb
         run: |
-          VERSION=$(./gradlew printVersion --quiet)
-          echo "$VERSION"
-          echo "$VERSION"
+          echo "$VERSION=$(./gradlew printVersion --quiet)" >> $GITHUB_ENV
 
-#      - name: Release SDKs
-#        env:
-#          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-#        run: |
-#          VERSION=$(./gradlew printVersion --quiet)
+      - name: Release SDKs
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo $VERSION
 #          npx fern-api release $VERSION --log-level debug
