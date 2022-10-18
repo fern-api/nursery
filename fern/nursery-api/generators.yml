@@ -13,7 +13,7 @@ draft:
     output-path: ./generated-openapi
 release:
   - name: fernapi/fern-typescript-sdk
-    version: 0.0.212-1-g97690bf
+    version: 0.0.214-1-g142b5fc
     publishing:
       npm:
         package-name: '@fern-api/nursery'
