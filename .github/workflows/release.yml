@@ -12,9 +12,14 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
 
-      - name: Release SDKs
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Print Version
         run: |
           VERSION=$(./gradlew printVersion --quiet)
-          npx fern-api release $VERSION --log-level debug
+          echo $VERSION
+
+#      - name: Release SDKs
+#        env:
+#          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+#        run: |
+#          VERSION=$(./gradlew printVersion --quiet)
+#          npx fern-api release $VERSION --log-level debug
