@@ -25,6 +25,7 @@ jobs:
         env:
           TERM: dumb
         run: |
+          ./gradlew --version
           echo "VERSION=$(./gradlew printVersion --quiet)" >> $GITHUB_ENV
 
       - name: Release SDKs

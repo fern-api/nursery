@@ -184,69 +184,69 @@ jobs:
 workflows:
   version: 2
   build:
-    jobs:
-      - fern-check:
-          filters: { tags: { only: /.*/ } }
-
-      - compile:
-          filters: { tags: { only: /.*/ } }
-          context:
-            - jfrog
-            - aws
-
-      - unit-test:
-          requires: [ compile ]
-          filters: { tags: { only: /.*/ } }
-          context:
-            - jfrog
-            - aws
-
-      - check:
-          requires: [ compile ]
-          filters: { tags: { only: /.*/ } }
-          context:
-            - jfrog
-            - aws
-
-      - build:
-          requires: [ compile ]
-          filters: { tags: { only: /.*/ } }
-          context:
-            - jfrog
-            - aws
-
-      - deploy-dev:
-          requires: [ compile, unit-test, check, build ]
-          filters:
-            branches:
-              only:
-                - main
-            tags:
-              ignore: /.*/
-          context:
-            - aws
-            - fern-dev
-            - github
-
-      - deploy-prod:
-          requires: [ compile, unit-test, check, build ]
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only:
-                - /.*/
-          context:
-            - aws
-            - fern-prod
-            - github
-
-      - publish-docker:
-          requires: [ check, unit-test, build ]
-          filters:
-            branches:
-              only: main
-            tags:
-              only: /.*/
-          context:
-            - docker-hub
+    jobs: []
+#      - fern-check:
+#          filters: { tags: { only: /.*/ } }
+#
+#      - compile:
+#          filters: { tags: { only: /.*/ } }
+#          context:
+#            - jfrog
+#            - aws
+#
+#      - unit-test:
+#          requires: [ compile ]
+#          filters: { tags: { only: /.*/ } }
+#          context:
+#            - jfrog
+#            - aws
+#
+#      - check:
+#          requires: [ compile ]
+#          filters: { tags: { only: /.*/ } }
+#          context:
+#            - jfrog
+#            - aws
+#
+#      - build:
+#          requires: [ compile ]
+#          filters: { tags: { only: /.*/ } }
+#          context:
+#            - jfrog
+#            - aws
+#
+#      - deploy-dev:
+#          requires: [ compile, unit-test, check, build ]
+#          filters:
+#            branches:
+#              only:
+#                - main
+#            tags:
+#              ignore: /.*/
+#          context:
+#            - aws
+#            - fern-dev
+#            - github
+#
+#      - deploy-prod:
+#          requires: [ compile, unit-test, check, build ]
+#          filters:
+#            branches:
+#              ignore: /.*/
+#            tags:
+#              only:
+#                - /.*/
+#          context:
+#            - aws
+#            - fern-prod
+#            - github
+#
+#      - publish-docker:
+#          requires: [ check, unit-test, build ]
+#          filters:
+#            branches:
+#              only: main
+#            tags:
+#              only: /.*/
+#          context:
+#            - docker-hub
