@@ -16,5 +16,5 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          VERSION=($(./gradlew printVersion))
+          VERSION=$(./gradlew printVersion --quiet)
           npx fern-api release $VERSION --log-level debug
