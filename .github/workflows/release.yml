@@ -1,9 +1,6 @@
 name: ci
 
-on:
-  push:
-    tags:
-      - '*.**'
+on: [push]
 
 jobs:
   release:
@@ -15,7 +12,12 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
 
+      - name: Print Version
+        run: |
+          echo "VERSION=$(./gradlew printVersion)" >> $GITHUB_ENV
+
       - name: Release SDKs
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx fern-api release ${{github.ref_name}} --log-level debug
+        run: |
+          npx fern-api release ${{ env.VERSION }} --log-level debug
