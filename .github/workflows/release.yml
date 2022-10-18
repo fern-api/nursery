@@ -12,12 +12,9 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
 
-      - name: Print Version
-        run: |
-          echo "VERSION=$(./gradlew printVersion)" >> $GITHUB_ENV
-
       - name: Release SDKs
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          npx fern-api release ${{ env.VERSION }} --log-level debug
+          VERSION=($(./gradlew printVersion))
+          npx fern-api release $VERSION --log-level debug
