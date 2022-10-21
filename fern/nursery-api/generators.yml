@@ -21,7 +21,7 @@ release:
     github:
       repository: fern-api/nursery-node
   - name: fernapi/fern-java-sdk
-    version: 0.0.117-4-g0686978
+    version: 0.0.117-5-gaa0c361
     publishing:
       maven:
         coordinate: 'io.github.fern-api:nursery'
