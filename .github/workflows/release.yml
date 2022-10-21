@@ -30,6 +30,7 @@ jobs:
 
       - name: Release SDKs
         env:
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           TERM: dumb
         run: |
