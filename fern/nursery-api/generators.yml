@@ -25,7 +25,7 @@ release:
     publishing:
       maven:
         coordinate: 'io.github.fern-api:nursery'
-        username: dsinghvi
+        username: 'dsinghvi'
         password: ${MAVEN_PASSWORD}
     github:
       repository: fern-api/nursery-java
