@@ -35,4 +35,4 @@ jobs:
           TERM: dumb
         run: |
           echo "${{ env.VERSION }}"
-          npx fern-api release "${{ env.VERSION }}" --log-level debug
+          npx @fern-api/fern-api-dev release "${{ env.VERSION }}" --log-level debug

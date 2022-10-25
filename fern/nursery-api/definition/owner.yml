@@ -3,7 +3,7 @@
 types:
 
   OwnerId:
-    alias: string
+    type: string
     docs: Unique id for an owner.
 
   CreateOwnerRequest:
