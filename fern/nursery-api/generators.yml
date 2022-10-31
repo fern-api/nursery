@@ -33,3 +33,7 @@ release:
     version: 0.0.9
     github:
       repository: fern-api/nursery-openapi
+  - name: fernapi/fern-postman
+    version: 0.0.23-4-g79882b6
+    github:
+      repository: fern-api/nursery-postman
