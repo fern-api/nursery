@@ -184,10 +184,10 @@ jobs:
 workflows:
   version: 2
   build:
-    jobs: []
-#      - fern-check:
-#          filters: { tags: { only: /.*/ } }
-#
+    jobs:
+      - fern-check:
+          filters: { tags: { only: /.*/ } }
+
 #      - compile:
 #          filters: { tags: { only: /.*/ } }
 #          context:
