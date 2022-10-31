@@ -14,18 +14,19 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
 
-      - name: Setup Java
-        id: setup-jre
-        uses: actions/setup-java@v1
+      - uses: actions/setup-java@v3
         with:
-          java-version: "11"
-          architecture: x64
+          distribution: temurin
+          java-version: 11
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
       - name: Print Version
         env:
           TERM: dumb
         run: |
-          ./gradlew
+          ./gradlew printVersion --quiet
           echo "VERSION=$(./gradlew printVersion --quiet)" >> $GITHUB_ENV
 
       - name: Release SDKs
