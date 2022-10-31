@@ -32,6 +32,8 @@ jobs:
         env:
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+          POSTMAN_WORKSPACE_ID: ${{ secrets.POSTMAN_WORKSPACE_ID }}
           TERM: dumb
         run: |
           npm config set @fern-api:registry https://registry.npmjs.org

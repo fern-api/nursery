@@ -34,6 +34,10 @@ release:
     github:
       repository: fern-api/nursery-openapi
   - name: fernapi/fern-postman
-    version: 0.0.23-4-g79882b6
+    version: 0.0.23-19-gf4ff655
+    publishing:
+      postman:
+        api-key: ${POSTMAN_API_KEY}
+        workspace-id: ${POSTMAN_WORKSPACE_ID}
     github:
       repository: fern-api/nursery-postman
