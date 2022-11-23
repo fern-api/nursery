@@ -30,7 +30,7 @@ services:
 
         create:
           method: POST
-          path: /
+          path: ""
           request: CreateOwnerRequest
           errors:
             - OwnerAlreadyExistsError
