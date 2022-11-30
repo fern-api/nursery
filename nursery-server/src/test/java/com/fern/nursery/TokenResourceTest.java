@@ -16,6 +16,8 @@
 
 package com.fern.nursery;
 
+import com.fern.nursery.api.model.owner.CreateOwnerRequest;
+import com.fern.nursery.api.model.owner.OwnerAlreadyExistsError;
 import com.fern.nursery.api.model.owner.OwnerId;
 import com.fern.nursery.api.model.owner.OwnerNotFoundError;
 import com.fern.nursery.api.model.token.CreateTokenRequest;
@@ -44,16 +46,19 @@ public class TokenResourceTest {
 
     private static TokenResource tokenResource;
 
+    private static OwnerResource ownerResource;
+
     @BeforeAll
     static void beforeAll() {
         nurseryDatabase =
                 NurseryDatabase.createForTest("jdbc:h2:mem:projectResourceTest;DB_CLOSE_DELAY=-1;MODE=MYSQL;");
         tokenResource = new TokenResource(nurseryDatabase);
+        ownerResource = new OwnerResource(nurseryDatabase);
     }
 
     @Test
-    public void test_createAndGetToken() throws TokenNotFoundError, OwnerNotFoundError {
-        OwnerId ownerFoo = OwnerId.of("foo");
+    public void test_createAndGetToken() throws TokenNotFoundError, OwnerNotFoundError, OwnerAlreadyExistsError {
+        OwnerId ownerFoo = createRandomOwner();
         String description = "My token!";
         CreateTokenResponse createTokenResponse = tokenResource.create(CreateTokenRequest.builder()
                 .ownerId(ownerFoo)
@@ -70,13 +75,13 @@ public class TokenResourceTest {
 
     @Test
     public void test_getTokensForOwner() throws OwnerNotFoundError {
-        OwnerId ownerFoo = OwnerId.of("foo");
+        OwnerId ownerFoo = createRandomOwner();
         CreateTokenResponse tokenOne = tokenResource.create(
                 CreateTokenRequest.builder().ownerId(ownerFoo).build());
         CreateTokenResponse tokenTwo = tokenResource.create(
                 CreateTokenRequest.builder().ownerId(ownerFoo).build());
 
-        OwnerId ownerBar = OwnerId.of("bar");
+        OwnerId ownerBar = createRandomOwner();
         CreateTokenResponse tokenThree = tokenResource.create(
                 CreateTokenRequest.builder().ownerId(ownerBar).build());
 
@@ -102,7 +107,7 @@ public class TokenResourceTest {
 
     @Test
     public void test_tokenRevocation() throws OwnerNotFoundError, TokenNotFoundError {
-        OwnerId ownerId = OwnerId.of(UUID.randomUUID().toString());
+        OwnerId ownerId = createRandomOwner();
         CreateTokenResponse createTokenResponse = tokenResource.create(
                 CreateTokenRequest.builder().ownerId(ownerId).build());
 
@@ -118,5 +123,15 @@ public class TokenResourceTest {
                 .token(createTokenResponse.getToken())
                 .build());
         Assertions.assertThat(revokedTokenMetadata.getStatus().isRevoked()).isTrue();
+    }
+
+    private static OwnerId createRandomOwner() {
+        try {
+            OwnerId ownerId = OwnerId.of(UUID.randomUUID().toString());
+            ownerResource.create(CreateOwnerRequest.builder().ownerId(ownerId).build());
+            return ownerId;
+        } catch (OwnerAlreadyExistsError e) {
+            throw new RuntimeException(e);
+        }
     }
 }

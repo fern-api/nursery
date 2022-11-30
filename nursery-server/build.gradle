@@ -69,6 +69,5 @@ eteTest {
     }
 }
 
-tasks.test.enabled = false
 tasks.eteTest.dependsOn ':nursery-server:dockerTagLatest'
 rootProject.tasks.build.dependsOn eteTest

@@ -98,8 +98,8 @@ public final class TokenResource implements TokenService {
 
     @Override
     public void revokeTokenById(TokenId tokenId) throws TokenNotFoundError {
-        boolean revoked =
-                nurseryDatabase.inTransactionResult(nurseryDao -> nurseryDao.tokenDao().revokeTokenById(tokenId.get()));
+        boolean revoked = nurseryDatabase.inTransactionResult(
+                nurseryDao -> nurseryDao.tokenDao().revokeTokenById(tokenId.get()));
         if (!revoked) {
             throw new TokenNotFoundError(TokenNotFoundErrorBody.of());
         }
@@ -107,8 +107,8 @@ public final class TokenResource implements TokenService {
 
     @Override
     public void revokeToken(RevokeTokenRequest request) throws TokenNotFoundError {
-        boolean revoked = nurseryDatabase.inTransactionResult(nurseryDao ->
-                        nurseryDao.tokenDao().revokeToken(request.getToken()));
+        boolean revoked = nurseryDatabase.inTransactionResult(
+                nurseryDao -> nurseryDao.tokenDao().revokeToken(request.getToken()));
         if (!revoked) {
             throw new TokenNotFoundError(TokenNotFoundErrorBody.of());
         }
