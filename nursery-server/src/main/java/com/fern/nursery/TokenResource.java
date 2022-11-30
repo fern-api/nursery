@@ -22,6 +22,7 @@ import com.fern.nursery.api.model.owner.OwnerNotFoundErrorBody;
 import com.fern.nursery.api.model.token.CreateTokenRequest;
 import com.fern.nursery.api.model.token.CreateTokenResponse;
 import com.fern.nursery.api.model.token.GetTokenMetadataRequest;
+import com.fern.nursery.api.model.token.RevokeTokenRequest;
 import com.fern.nursery.api.model.token.TokenId;
 import com.fern.nursery.api.model.token.TokenMetadata;
 import com.fern.nursery.api.model.token.TokenNotFoundError;
@@ -95,13 +96,31 @@ public final class TokenResource implements TokenService {
                 .orElseThrow(() -> new OwnerNotFoundError(OwnerNotFoundErrorBody.of()));
     }
 
+    @Override
+    public void revokeTokenById(TokenId tokenId) throws TokenNotFoundError {
+        boolean revoked =
+                nurseryDatabase.inTransactionResult(nurseryDao -> nurseryDao.tokenDao().revokeTokenById(tokenId.get()));
+        if (!revoked) {
+            throw new TokenNotFoundError(TokenNotFoundErrorBody.of());
+        }
+    }
+
+    @Override
+    public void revokeToken(RevokeTokenRequest request) throws TokenNotFoundError {
+        boolean revoked = nurseryDatabase.inTransactionResult(nurseryDao ->
+                        nurseryDao.tokenDao().revokeToken(request.getToken()));
+        if (!revoked) {
+            throw new TokenNotFoundError(TokenNotFoundErrorBody.of());
+        }
+    }
+
     private static TokenMetadata convertToTokenMetadata(TokenInfo tokenInfo) {
         return TokenMetadata.builder()
                 .tokenId(TokenId.of(tokenInfo.tokenId()))
                 .ownerId(OwnerId.of(tokenInfo.ownerId()))
                 .createdTime(
                         tokenInfo.createdDateTime().format(DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("UTC"))))
-                .status(TokenStatus.active())
+                .status(tokenInfo.isRevoked() ? TokenStatus.revoked() : TokenStatus.active())
                 .description(tokenInfo.description())
                 .build();
     }

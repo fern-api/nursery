@@ -30,7 +30,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
-import org.jooq.Record4;
+import org.jooq.Record5;
 import org.jooq.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,11 +72,12 @@ public final class TokenDaoImpl implements TokenDao {
     public Optional<TokenInfo> getToken(String token) {
         String sha256 =
                 Hashing.sha256().hashString(token, StandardCharsets.UTF_8).toString();
-        Record4<String, String, LocalDateTime, String> row = transactionContext
+        Record5<String, String, LocalDateTime, Boolean, String> row = transactionContext
                 .select(
                         Tables.TOKENS.OWNER_ID,
                         Tables.TOKENS.TOKEN_ID,
                         Tables.TOKENS.CREATED_DATETIME,
+                        Tables.TOKENS.IS_REVOKED,
                         Tables.TOKENS.DESCRIPTION)
                 .from(Tables.TOKENS)
                 .where(Tables.TOKENS.TOKEN_HASH.eq(sha256))
@@ -88,6 +89,7 @@ public final class TokenDaoImpl implements TokenDao {
                 .tokenId(row.get(Tables.TOKENS.TOKEN_ID))
                 .ownerId(row.get(Tables.TOKENS.OWNER_ID))
                 .createdDateTime(row.get(Tables.TOKENS.CREATED_DATETIME))
+                .revoked(row.get(Tables.TOKENS.IS_REVOKED))
                 .description(Optional.ofNullable(row.get(Tables.TOKENS.DESCRIPTION)))
                 .build());
     }
@@ -95,12 +97,13 @@ public final class TokenDaoImpl implements TokenDao {
     @Override
     public List<TokenInfo> getTokensForOwner(String ownerId) throws OwnerNotFoundException {
         checkIfOwnerExists(ownerId);
-        Result<Record4<String, String, LocalDateTime, String>> rows = transactionContext
+        Result<Record5<String, String, LocalDateTime, String, Boolean>> rows = transactionContext
                 .select(
                         Tables.TOKENS.OWNER_ID,
                         Tables.TOKENS.TOKEN_ID,
                         Tables.TOKENS.CREATED_DATETIME,
-                        Tables.TOKENS.DESCRIPTION)
+                        Tables.TOKENS.DESCRIPTION,
+                        Tables.TOKENS.IS_REVOKED)
                 .from(Tables.TOKENS)
                 .where(Tables.TOKENS.OWNER_ID.eq(ownerId))
                 .fetch();
@@ -109,9 +112,32 @@ public final class TokenDaoImpl implements TokenDao {
                         .tokenId(row.get(Tables.TOKENS.TOKEN_ID))
                         .ownerId(row.get(Tables.TOKENS.OWNER_ID))
                         .createdDateTime(row.get(Tables.TOKENS.CREATED_DATETIME))
+                        .revoked(row.get(Tables.TOKENS.IS_REVOKED))
                         .description(Optional.ofNullable(row.get(Tables.TOKENS.DESCRIPTION)))
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean revokeToken(String token) {
+        String sha256 =
+                Hashing.sha256().hashString(token, StandardCharsets.UTF_8).toString();
+        int numUpdated = transactionContext
+                .update(Tables.TOKENS)
+                .set(Tables.TOKENS.IS_REVOKED, true)
+                .where(Tables.TOKENS.TOKEN_HASH.eq(sha256))
+                .execute();
+        return numUpdated > 0;
+    }
+
+    @Override
+    public boolean revokeTokenById(String tokenId) {
+        int numUpdated = transactionContext
+                .update(Tables.TOKENS)
+                .set(Tables.TOKENS.IS_REVOKED, true)
+                .where(Tables.TOKENS.TOKEN_ID.eq(tokenId))
+                .execute();
+        return numUpdated > 0;
     }
 
     private static String generateToken() {

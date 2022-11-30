@@ -21,6 +21,7 @@ import com.fern.nursery.api.model.owner.OwnerNotFoundError;
 import com.fern.nursery.api.model.token.CreateTokenRequest;
 import com.fern.nursery.api.model.token.CreateTokenResponse;
 import com.fern.nursery.api.model.token.GetTokenMetadataRequest;
+import com.fern.nursery.api.model.token.RevokeTokenRequest;
 import com.fern.nursery.api.model.token.TokenId;
 import com.fern.nursery.api.model.token.TokenMetadata;
 import com.fern.nursery.api.model.token.TokenNotFoundError;
@@ -30,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.data.TemporalUnitWithinOffset;
@@ -96,5 +98,25 @@ public class TokenResourceTest {
                             GetTokenMetadataRequest.builder().token("fake").build());
                 })
                 .isInstanceOf(TokenNotFoundError.class);
+    }
+
+    @Test
+    public void test_tokenRevocation() throws OwnerNotFoundError, TokenNotFoundError {
+        OwnerId ownerId = OwnerId.of(UUID.randomUUID().toString());
+        CreateTokenResponse createTokenResponse = tokenResource.create(
+                CreateTokenRequest.builder().ownerId(ownerId).build());
+
+        TokenMetadata tokenMetadata = tokenResource.getTokenMetadata(GetTokenMetadataRequest.builder()
+                .token(createTokenResponse.getToken())
+                .build());
+        Assertions.assertThat(tokenMetadata.getStatus().isActive()).isTrue();
+
+        tokenResource.revokeToken(RevokeTokenRequest.builder()
+                .token(createTokenResponse.getToken())
+                .build());
+        TokenMetadata revokedTokenMetadata = tokenResource.getTokenMetadata(GetTokenMetadataRequest.builder()
+                .token(createTokenResponse.getToken())
+                .build());
+        Assertions.assertThat(revokedTokenMetadata.getStatus().isRevoked()).isTrue();
     }
 }
