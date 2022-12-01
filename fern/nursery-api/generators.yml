@@ -7,7 +7,7 @@ groups:
         config:
           mode: server
           serverFrameworks: jersey
-  external:
+  sdks:
     generators:
       - name: fernapi/fern-typescript-sdk
         version: 0.0.241
