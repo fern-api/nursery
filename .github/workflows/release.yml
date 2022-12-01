@@ -45,4 +45,4 @@ jobs:
           npm config set @fern-api:registry https://registry.npmjs.org
           npm config set //registry.npmjs.org/:_authToken "${{ env.NPM_TOKEN }}"
           echo "${{ env.VERSION }}"
-          npx @fern-api/fern-api-dev release --group sdks --version "${{ env.VERSION }}" --log-level debug
+          npx @fern-api/fern-api-dev generate --group sdks --version "${{ env.VERSION }}" --log-level debug
