@@ -28,6 +28,8 @@ jobs:
           paths: [ project, .gradle/init.gradle ]
 
   fern-check:
+    environment:
+      NPM_TOKEN: $YARN_NPM_AUTH_TOKEN
     docker:
       - image: cimg/openjdk:11.0-node
     resource_class: small
@@ -187,6 +189,8 @@ workflows:
     jobs:
       - fern-check:
           filters: { tags: { only: /.*/ } }
+          context:
+            - npm
 
       - compile:
           filters: { tags: { only: /.*/ } }
