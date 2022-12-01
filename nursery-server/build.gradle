@@ -36,6 +36,8 @@ dependencies {
     testImplementation 'org.mockito:mockito-junit-jupiter'
     testImplementation 'org.mockito:mockito-inline'
     testImplementation 'com.palantir.docker.compose:docker-compose-junit-jupiter'
+
+    testRuntimeOnly 'com.h2database:h2' // h2 database driver
 }
 
 testSets {
@@ -69,6 +71,5 @@ eteTest {
     }
 }
 
-tasks.test.enabled = false
 tasks.eteTest.dependsOn ':nursery-server:dockerTagLatest'
 rootProject.tasks.build.dependsOn eteTest

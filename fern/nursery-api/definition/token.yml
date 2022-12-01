@@ -21,6 +21,10 @@ types:
     properties:
       token: string
 
+  RevokeTokenRequest:
+    properties:
+      token: string
+
   TokenMetadata:
     properties:
       tokenId: TokenId
@@ -68,6 +72,21 @@ services:
           response: list<TokenMetadata>
           errors:
             - owner.OwnerNotFoundError
+
+        revokeTokenById:
+          method: POST
+          path: /revoke/{tokenId}
+          path-parameters:
+            tokenId: TokenId
+          errors:
+            - TokenNotFoundError
+
+        revokeToken:
+          method: POST
+          path: /revoke
+          request: RevokeTokenRequest
+          errors:
+            - TokenNotFoundError
 
 errors:
   TokenNotFoundError:

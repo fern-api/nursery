@@ -33,6 +33,8 @@ public interface TokenInfo {
 
     LocalDateTime createdDateTime();
 
+    boolean isRevoked();
+
     static ImmutableTokenInfo.TokenIdBuildStage builder() {
         return ImmutableTokenInfo.builder();
     }

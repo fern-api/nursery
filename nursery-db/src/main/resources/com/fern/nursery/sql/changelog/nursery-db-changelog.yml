@@ -60,3 +60,17 @@ databaseChangeLog:
               - column:
                   name: data
                   type: ${attribute_bytes_type}
+
+  - changeSet:
+      id: 3
+      author: deep@buildwithfern.com
+      changes:
+        - addColumn:
+            tableName: tokens
+            columns:
+              - column:
+                  name: is_revoked
+                  type: boolean
+                  defaultValue: false
+                  constraints:
+                    nullable: false

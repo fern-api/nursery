@@ -16,11 +16,14 @@
 
 package com.fern.nursery;
 
+import com.fern.nursery.api.model.owner.CreateOwnerRequest;
+import com.fern.nursery.api.model.owner.OwnerAlreadyExistsError;
 import com.fern.nursery.api.model.owner.OwnerId;
 import com.fern.nursery.api.model.owner.OwnerNotFoundError;
 import com.fern.nursery.api.model.token.CreateTokenRequest;
 import com.fern.nursery.api.model.token.CreateTokenResponse;
 import com.fern.nursery.api.model.token.GetTokenMetadataRequest;
+import com.fern.nursery.api.model.token.RevokeTokenRequest;
 import com.fern.nursery.api.model.token.TokenId;
 import com.fern.nursery.api.model.token.TokenMetadata;
 import com.fern.nursery.api.model.token.TokenNotFoundError;
@@ -30,6 +33,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.data.TemporalUnitWithinOffset;
@@ -42,16 +46,19 @@ public class TokenResourceTest {
 
     private static TokenResource tokenResource;
 
+    private static OwnerResource ownerResource;
+
     @BeforeAll
     static void beforeAll() {
         nurseryDatabase =
                 NurseryDatabase.createForTest("jdbc:h2:mem:projectResourceTest;DB_CLOSE_DELAY=-1;MODE=MYSQL;");
         tokenResource = new TokenResource(nurseryDatabase);
+        ownerResource = new OwnerResource(nurseryDatabase);
     }
 
     @Test
-    public void test_createAndGetToken() throws TokenNotFoundError, OwnerNotFoundError {
-        OwnerId ownerFoo = OwnerId.of("foo");
+    public void test_createAndGetToken() throws TokenNotFoundError, OwnerNotFoundError, OwnerAlreadyExistsError {
+        OwnerId ownerFoo = createRandomOwner();
         String description = "My token!";
         CreateTokenResponse createTokenResponse = tokenResource.create(CreateTokenRequest.builder()
                 .ownerId(ownerFoo)
@@ -68,25 +75,25 @@ public class TokenResourceTest {
 
     @Test
     public void test_getTokensForOwner() throws OwnerNotFoundError {
-        OwnerId ownerFoo = OwnerId.of("foo");
+        OwnerId ownerFoo = createRandomOwner();
         CreateTokenResponse tokenOne = tokenResource.create(
                 CreateTokenRequest.builder().ownerId(ownerFoo).build());
         CreateTokenResponse tokenTwo = tokenResource.create(
                 CreateTokenRequest.builder().ownerId(ownerFoo).build());
 
-        OwnerId ownerBar = OwnerId.of("bar");
+        OwnerId ownerBar = createRandomOwner();
         CreateTokenResponse tokenThree = tokenResource.create(
                 CreateTokenRequest.builder().ownerId(ownerBar).build());
 
         Set<TokenId> fooTokenIds = tokenResource.getTokensForOwner(ownerFoo).stream()
                 .map(TokenMetadata::getTokenId)
                 .collect(Collectors.toSet());
-        Assertions.assertThat(fooTokenIds).containsExactly(tokenOne.getTokenId(), tokenTwo.getTokenId());
+        Assertions.assertThat(fooTokenIds).containsOnly(tokenOne.getTokenId(), tokenTwo.getTokenId());
 
         Set<TokenId> barTokenIds = tokenResource.getTokensForOwner(ownerBar).stream()
                 .map(TokenMetadata::getTokenId)
                 .collect(Collectors.toSet());
-        Assertions.assertThat(barTokenIds).containsExactly(tokenThree.getTokenId());
+        Assertions.assertThat(barTokenIds).containsOnly(tokenThree.getTokenId());
     }
 
     @Test
@@ -96,5 +103,35 @@ public class TokenResourceTest {
                             GetTokenMetadataRequest.builder().token("fake").build());
                 })
                 .isInstanceOf(TokenNotFoundError.class);
+    }
+
+    @Test
+    public void test_tokenRevocation() throws OwnerNotFoundError, TokenNotFoundError {
+        OwnerId ownerId = createRandomOwner();
+        CreateTokenResponse createTokenResponse = tokenResource.create(
+                CreateTokenRequest.builder().ownerId(ownerId).build());
+
+        TokenMetadata tokenMetadata = tokenResource.getTokenMetadata(GetTokenMetadataRequest.builder()
+                .token(createTokenResponse.getToken())
+                .build());
+        Assertions.assertThat(tokenMetadata.getStatus().isActive()).isTrue();
+
+        tokenResource.revokeToken(RevokeTokenRequest.builder()
+                .token(createTokenResponse.getToken())
+                .build());
+        TokenMetadata revokedTokenMetadata = tokenResource.getTokenMetadata(GetTokenMetadataRequest.builder()
+                .token(createTokenResponse.getToken())
+                .build());
+        Assertions.assertThat(revokedTokenMetadata.getStatus().isRevoked()).isTrue();
+    }
+
+    private static OwnerId createRandomOwner() {
+        try {
+            OwnerId ownerId = OwnerId.of(UUID.randomUUID().toString());
+            ownerResource.create(CreateOwnerRequest.builder().ownerId(ownerId).build());
+            return ownerId;
+        } catch (OwnerAlreadyExistsError e) {
+            throw new RuntimeException(e);
+        }
     }
 }

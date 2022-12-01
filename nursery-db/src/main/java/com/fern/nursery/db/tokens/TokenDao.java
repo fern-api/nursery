@@ -33,4 +33,8 @@ public interface TokenDao {
     Optional<TokenInfo> getToken(String token);
 
     List<TokenInfo> getTokensForOwner(String ownerId) throws OwnerNotFoundException;
+
+    boolean revokeToken(String token);
+
+    boolean revokeTokenById(String tokenId);
 }

@@ -35,9 +35,6 @@ allprojects {
     repositories {
         mavenCentral()
         maven {
-            url "https://maven.buildwithfern.com"
-        }
-        maven {
             url "https://maven-dev.buildwithfern.com"
         }
     }
