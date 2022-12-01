@@ -28,15 +28,15 @@ jobs:
           paths: [ project, .gradle/init.gradle ]
 
   fern-check:
-    environment:
-      NPM_TOKEN: $YARN_NPM_AUTH_TOKEN
     docker:
       - image: cimg/openjdk:11.0-node
     resource_class: small
     steps:
       - checkout
       - run: |
-          sudo npm install -g @fern-api/fern-api-dev
+          npm config set @fern-api:registry https://registry.npmjs.org
+          npm config set //registry.npmjs.org/:_authToken $YARN_NPM_AUTH_TOKEN
+          npm install -g @fern-api/fern-api-dev
           fern-dev check
 
   check:

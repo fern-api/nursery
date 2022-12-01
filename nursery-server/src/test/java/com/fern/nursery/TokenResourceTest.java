@@ -88,12 +88,12 @@ public class TokenResourceTest {
         Set<TokenId> fooTokenIds = tokenResource.getTokensForOwner(ownerFoo).stream()
                 .map(TokenMetadata::getTokenId)
                 .collect(Collectors.toSet());
-        Assertions.assertThat(fooTokenIds).containsExactly(tokenOne.getTokenId(), tokenTwo.getTokenId());
+        Assertions.assertThat(fooTokenIds).containsOnly(tokenOne.getTokenId(), tokenTwo.getTokenId());
 
         Set<TokenId> barTokenIds = tokenResource.getTokensForOwner(ownerBar).stream()
                 .map(TokenMetadata::getTokenId)
                 .collect(Collectors.toSet());
-        Assertions.assertThat(barTokenIds).containsExactly(tokenThree.getTokenId());
+        Assertions.assertThat(barTokenIds).containsOnly(tokenThree.getTokenId());
     }
 
     @Test
