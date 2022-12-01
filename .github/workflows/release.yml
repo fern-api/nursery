@@ -25,6 +25,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Initialize gradlew
+        run: ./gradlew
+
       - name: Print Version
         env:
           TERM: dumb
