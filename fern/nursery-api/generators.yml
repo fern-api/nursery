@@ -40,3 +40,20 @@ groups:
           repository: fern-api/nursery-postman
       - name: fernapi/fern-pydantic-model
         version: 0.0.25
+  internal:
+    generators:
+      - name: fernapi/fern-java-sdk
+        version: 0.0.124-2-g58ed4e2
+        output:
+          location: maven
+          url: maven.buildwithfern.com
+          coordinate: com.fern.fern:nursery
+          username: fern
+          password: ${FERN_DEV_TOKEN}
+      - name: fernapi/fern-typescript-sdk
+        version: 0.0.241
+        output:
+          location: npm
+          url: npm.buildwithfern.com
+          package-name: '@fern-fern/nursery'
+          token: ${FERN_DEV_TOKEN}
