@@ -34,15 +34,30 @@ jobs:
         run: |
           echo "VERSION=$(./gradlew printVersion --quiet)" >> $GITHUB_ENV
 
-      - name: Release SDKs
+      - name: Generate SDKs
         env:
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
           POSTMAN_WORKSPACE_ID: ${{ secrets.POSTMAN_WORKSPACE_ID }}
           TERM: dumb
+          FERN_DEV_TOKEN: ${{ secrets.FERN_DEV_TOKEN }}
         run: |
           npm config set @fern-api:registry https://registry.npmjs.org
           npm config set //registry.npmjs.org/:_authToken "${{ env.NPM_TOKEN }}"
           echo "${{ env.VERSION }}"
           npx @fern-api/fern-api-dev generate --group sdks --version "${{ env.VERSION }}" --log-level debug
+
+      - name: Generate Internal
+        env:
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+          POSTMAN_WORKSPACE_ID: ${{ secrets.POSTMAN_WORKSPACE_ID }}
+          FERN_DEV_TOKEN: ${{ secrets.FERN_DEV_TOKEN }}
+          TERM: dumb
+        run: |
+          npm config set @fern-api:registry https://registry.npmjs.org
+          npm config set //registry.npmjs.org/:_authToken "${{ env.NPM_TOKEN }}"
+          echo "${{ env.VERSION }}"
+          npx @fern-api/fern-api-dev generate --group internal --log-level debug
