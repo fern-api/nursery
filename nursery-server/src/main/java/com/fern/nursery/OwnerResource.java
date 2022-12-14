@@ -16,19 +16,19 @@
 
 package com.fern.nursery;
 
-import com.fern.nursery.api.model.owner.CreateOwnerRequest;
-import com.fern.nursery.api.model.owner.Owner;
-import com.fern.nursery.api.model.owner.OwnerAlreadyExistsError;
-import com.fern.nursery.api.model.owner.OwnerAlreadyExistsErrorBody;
-import com.fern.nursery.api.model.owner.OwnerId;
-import com.fern.nursery.api.model.owner.OwnerNotFoundError;
-import com.fern.nursery.api.model.owner.OwnerNotFoundErrorBody;
-import com.fern.nursery.api.model.owner.UpdateOwnerRequest;
-import com.fern.nursery.api.server.owner.OwnerService;
 import com.fern.nursery.db.NurseryDatabase;
 import com.fern.nursery.db.owners.DbOwner;
 import com.fern.nursery.db.owners.OwnerAlreadyExistsException;
 import com.fern.nursery.db.owners.OwnerNotFoundException;
+import com.fern.nursery.model.owner.CreateOwnerRequest;
+import com.fern.nursery.model.owner.Owner;
+import com.fern.nursery.model.owner.OwnerAlreadyExistsError;
+import com.fern.nursery.model.owner.OwnerAlreadyExistsErrorBody;
+import com.fern.nursery.model.owner.OwnerId;
+import com.fern.nursery.model.owner.OwnerNotFoundError;
+import com.fern.nursery.model.owner.OwnerNotFoundErrorBody;
+import com.fern.nursery.model.owner.UpdateOwnerRequest;
+import com.fern.nursery.server.owner.OwnerService;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;

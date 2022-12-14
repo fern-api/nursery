@@ -17,9 +17,9 @@
 package com.fern.nursery;
 
 import com.fern.java.jersey.OptionalQueryParamProvider;
-import com.fern.nursery.api.server.AbstractServiceRegistry;
 import com.fern.nursery.dagger.NurseryCoordinatorComponent;
 import com.fern.nursery.jaxrs.CorsResponseFilter;
+import com.fern.nursery.server.AbstractServiceRegistry;
 
 public final class ServiceRegistry extends AbstractServiceRegistry {
 
