@@ -10,7 +10,7 @@ groups:
   sdks:
     generators:
       - name: fernapi/fern-typescript-sdk
-        version: 0.0.241
+        version: 0.0.247-3-g1705c21
         output:
           location: npm
           package-name: '@fern-api/nursery'
@@ -51,7 +51,7 @@ groups:
           username: fern
           password: ${FERN_DEV_TOKEN}
       - name: fernapi/fern-typescript-sdk
-        version: 0.0.241
+        version: 0.0.247-3-g1705c21
         output:
           location: npm
           url: npm.buildwithfern.com

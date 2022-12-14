@@ -21,7 +21,7 @@ apply plugin: 'com.palantir.docker'
 
 dependencies {
     implementation project(':nursery-db')
-    implementation 'com.fern.fern:nursery-api-server-jersey'
+    implementation 'com.fern.fern:nursery-server-jersey'
     implementation 'org.springframework.boot:spring-boot-starter-jersey'
     implementation 'com.google.dagger:dagger'
 
