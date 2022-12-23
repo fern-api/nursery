@@ -46,6 +46,17 @@ services:
           response: CreateTokenResponse
           errors:
             - owner.OwnerNotFoundError
+          examples:
+            - request:
+                ownerId: some-owner-id
+              response:
+                body:
+                  token: token-value
+                  tokenId: token-id
+            - request:
+                ownerId: missing-owner-id
+              response:
+                error: owner.OwnerNotFoundError
 
         getTokenMetadata:
           method: POST
@@ -58,6 +69,21 @@ services:
           response: TokenMetadata
           errors:
             - TokenNotFoundError
+          examples:
+            - request:
+                token: token-value
+              response:
+                body:
+                  tokenId: token-id
+                  ownerId: some-owner-id
+                  createdTime: "2022-12-23T10:43:35Z"
+                  status:
+                    type: active
+            - request:
+                token: missing-token-value
+              response:
+                error: TokenNotFoundError
+
 
         # add paging
         getTokensForOwner:
@@ -68,6 +94,20 @@ services:
           response: list<TokenMetadata>
           errors:
             - owner.OwnerNotFoundError
+          examples:
+            - path-parameters:
+                ownerId: some-owner-id
+              response:
+                body:
+                  - tokenId: token-id
+                    ownerId: some-owner-id
+                    createdTime: "2022-12-23T10:43:35Z"
+                    status:
+                      type: active
+            - path-parameters:
+                ownerId: missing-owner-id
+              response:
+                error: owner.OwnerNotFoundError
 
         revokeTokenById:
           method: POST
@@ -76,6 +116,13 @@ services:
             tokenId: TokenId
           errors:
             - TokenNotFoundError
+          examples:
+            - path-parameters:
+                tokenId: some-token-id
+            - path-parameters:
+                tokenId: missing-token-id
+              response:
+                error: TokenNotFoundError
 
         revokeToken:
           method: POST
@@ -87,6 +134,13 @@ services:
                 token: string
           errors:
             - TokenNotFoundError
+          examples:
+            - request:
+                token: some-token-value
+            - request:
+                token: missing-token-value
+              response:
+                error: TokenNotFoundError
 
 errors:
   TokenNotFoundError:

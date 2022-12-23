@@ -10,7 +10,7 @@ groups:
   sdks:
     generators:
       - name: fernapi/fern-typescript-sdk
-        version: 0.0.247-3-g1705c21
+        version: 0.0.249
         output:
           location: npm
           package-name: '@fern-api/nursery'
@@ -31,7 +31,7 @@ groups:
         github:
           repository: fern-api/nursery-openapi
       - name: fernapi/fern-postman
-        version: 0.0.31
+        version: 0.0.32-rc0
         output:
           location: postman
           api-key: ${POSTMAN_API_KEY}
@@ -51,7 +51,7 @@ groups:
           username: fern
           password: ${FERN_DEV_TOKEN}
       - name: fernapi/fern-typescript-sdk
-        version: 0.0.247-3-g1705c21
+        version: 0.0.249
         output:
           location: npm
           url: npm.buildwithfern.com

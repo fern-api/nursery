@@ -30,7 +30,18 @@ services:
                 data: unknown
           errors:
             - OwnerAlreadyExistsError
-
+          examples:
+            - request:
+                ownerId: some-owner-id
+                data:
+                  key: value
+            - request:
+                ownerId: duplicate-owner-id
+                data:
+                  key: value
+              response:
+                error: OwnerAlreadyExistsError
+          
         get:
           method: GET
           path: /{ownerId}
@@ -39,6 +50,18 @@ services:
           response: Owner
           errors:
             - OwnerNotFoundError
+          examples:
+            - path-parameters:
+                ownerId: some-owner-id
+              response:
+                body:
+                  ownerId: some-owner-id
+                  data:
+                    key: value
+            - path-parameters:
+                ownerId: missing-owner-id
+              response:
+                error: OwnerNotFoundError
 
         update:
           method: PUT
@@ -53,6 +76,25 @@ services:
           response: Owner
           errors:
             - OwnerNotFoundError
+          examples:
+            - path-parameters:
+                ownerId: some-owner-id
+              request:
+                data:
+                  key: value
+              response:
+                body:
+                  ownerId: some-owner-id
+                  data:
+                    key: value
+            - path-parameters:
+                ownerId: missing-owner-id
+              request:
+                data:
+                  key: value
+              response:
+                error: OwnerNotFoundError
+
 
 errors:
   OwnerAlreadyExistsError:
