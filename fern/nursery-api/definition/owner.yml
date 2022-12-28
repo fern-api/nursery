@@ -2,14 +2,29 @@
 
 types:
 
+  CustomOwnerData:
+    type: unknown
+    examples:
+      - name: Example1
+        value:
+          custom-key: custom-value
+
   OwnerId:
     type: string
     docs: Unique id for an owner.
+    examples:
+      - name: Example1
+        value: some-owner-id
 
   Owner:
     properties:
       ownerId: OwnerId
-      data: unknown
+      data: CustomOwnerData
+    examples:
+      - name: Example1
+        value:
+          ownerId: $OwnerId.Example1
+          data: $CustomOwnerData.Example1
 
 services:
   http:
@@ -27,18 +42,16 @@ services:
             body:
               properties:
                 ownerId: OwnerId
-                data: unknown
+                data: CustomOwnerData
           errors:
             - OwnerAlreadyExistsError
           examples:
             - request:
-                ownerId: some-owner-id
-                data:
-                  key: value
+                ownerId: $OwnerId.Example1
+                data: $CustomOwnerData.Example1
             - request:
                 ownerId: duplicate-owner-id
-                data:
-                  key: value
+                data: $CustomOwnerData.Example1
               response:
                 error: OwnerAlreadyExistsError
           
@@ -52,12 +65,9 @@ services:
             - OwnerNotFoundError
           examples:
             - path-parameters:
-                ownerId: some-owner-id
+                ownerId: $OwnerId.Example1
               response:
-                body:
-                  ownerId: some-owner-id
-                  data:
-                    key: value
+                body: $Owner.Example1
             - path-parameters:
                 ownerId: missing-owner-id
               response:
@@ -72,26 +82,23 @@ services:
             name: UpdateOwnerRequest
             body:
               properties:
-                data: unknown
+                data: CustomOwnerData
           response: Owner
           errors:
             - OwnerNotFoundError
           examples:
             - path-parameters:
-                ownerId: some-owner-id
+                ownerId: $OwnerId.Example1
               request:
-                data:
-                  key: value
+                data: $CustomOwnerData.Example1
               response:
                 body:
-                  ownerId: some-owner-id
-                  data:
-                    key: value
+                  ownerId: $OwnerId.Example1
+                  data: $CustomOwnerData.Example1
             - path-parameters:
                 ownerId: missing-owner-id
               request:
-                data:
-                  key: value
+                data: $CustomOwnerData.Example1
               response:
                 error: OwnerNotFoundError
 

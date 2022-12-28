@@ -18,6 +18,7 @@ package com.fern.nursery;
 
 import com.fern.nursery.db.NurseryDatabase;
 import com.fern.nursery.model.owner.CreateOwnerRequest;
+import com.fern.nursery.model.owner.CustomOwnerData;
 import com.fern.nursery.model.owner.OwnerAlreadyExistsError;
 import com.fern.nursery.model.owner.OwnerId;
 import com.fern.nursery.model.owner.OwnerNotFoundError;
@@ -128,7 +129,10 @@ public class TokenResourceTest {
     private static OwnerId createRandomOwner() {
         try {
             OwnerId ownerId = OwnerId.of(UUID.randomUUID().toString());
-            ownerResource.create(CreateOwnerRequest.builder().ownerId(ownerId).build());
+            ownerResource.create(CreateOwnerRequest.builder()
+                    .ownerId(ownerId)
+                    .data(CustomOwnerData.of(Optional.empty()))
+                    .build());
             return ownerId;
         } catch (OwnerAlreadyExistsError e) {
             throw new RuntimeException(e);

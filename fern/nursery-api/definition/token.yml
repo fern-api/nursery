@@ -5,12 +5,21 @@ imports:
 
 types:
 
-  TokenId: string
+  TokenId:
+    type: string
+    examples:
+      - name: Example1
+        value: some-token-id
 
   CreateTokenResponse:
     properties:
       token: string
       tokenId: TokenId
+    examples:
+      - name: Example1
+        value:
+          token: some-token-value
+          tokenId: $TokenId.Example1
 
   TokenMetadata:
     properties:
@@ -19,12 +28,30 @@ types:
       description: optional<string>
       createdTime: datetime
       status: TokenStatus
+    examples:
+      - name: Example1
+        value:
+          tokenId: $TokenId.Example1
+          ownerId: $owner.OwnerId.Example1
+          createdTime: "2022-12-23T10:43:35Z"
+          status: $TokenStatus.ActiveExample
+          
 
   TokenStatus:
     union:
       active: {}
       expired: {}
       revoked: {}
+    examples:
+      - name: ActiveExample
+        value:
+          type: active
+      - name: ExpiredExample
+        value:
+          type: expired
+      - name: RevokedExample
+        value:
+          type: revoked
 
 services:
   http:
@@ -48,11 +75,9 @@ services:
             - owner.OwnerNotFoundError
           examples:
             - request:
-                ownerId: some-owner-id
+                ownerId: $owner.OwnerId.Example1
               response:
-                body:
-                  token: token-value
-                  tokenId: token-id
+                body: $CreateTokenResponse.Example1
             - request:
                 ownerId: missing-owner-id
               response:
@@ -73,12 +98,7 @@ services:
             - request:
                 token: token-value
               response:
-                body:
-                  tokenId: token-id
-                  ownerId: some-owner-id
-                  createdTime: "2022-12-23T10:43:35Z"
-                  status:
-                    type: active
+                body: $TokenMetadata.Example1
             - request:
                 token: missing-token-value
               response:
@@ -96,14 +116,10 @@ services:
             - owner.OwnerNotFoundError
           examples:
             - path-parameters:
-                ownerId: some-owner-id
+                ownerId: $owner.OwnerId.Example1
               response:
                 body:
-                  - tokenId: token-id
-                    ownerId: some-owner-id
-                    createdTime: "2022-12-23T10:43:35Z"
-                    status:
-                      type: active
+                  - $TokenMetadata.Example1
             - path-parameters:
                 ownerId: missing-owner-id
               response:
@@ -118,7 +134,7 @@ services:
             - TokenNotFoundError
           examples:
             - path-parameters:
-                tokenId: some-token-id
+                tokenId: $TokenId.Example1
             - path-parameters:
                 tokenId: missing-token-id
               response:
