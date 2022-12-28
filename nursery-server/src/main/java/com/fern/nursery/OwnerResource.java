@@ -21,6 +21,7 @@ import com.fern.nursery.db.owners.DbOwner;
 import com.fern.nursery.db.owners.OwnerAlreadyExistsException;
 import com.fern.nursery.db.owners.OwnerNotFoundException;
 import com.fern.nursery.model.owner.CreateOwnerRequest;
+import com.fern.nursery.model.owner.CustomOwnerData;
 import com.fern.nursery.model.owner.Owner;
 import com.fern.nursery.model.owner.OwnerAlreadyExistsError;
 import com.fern.nursery.model.owner.OwnerAlreadyExistsErrorBody;
@@ -89,7 +90,7 @@ public final class OwnerResource implements OwnerService {
     private static Owner convertToOwner(DbOwner dbOwner) {
         return Owner.builder()
                 .ownerId(OwnerId.of(dbOwner.ownerId()))
-                .data(dbOwner.data())
+                .data(CustomOwnerData.of(Optional.ofNullable(dbOwner.data())))
                 .build();
     }
 }
