@@ -60,7 +60,8 @@ public final class TokenResource implements TokenService {
                     try {
                         return Optional.of(nurseryDao
                                 .tokenDao()
-                                .createToken(request.getOwnerId().get(), request.getDescription()));
+                                .createToken(
+                                        request.getOwnerId().get(), request.getDescription(), request.getPrefix()));
                     } catch (OwnerNotFoundException e) {
                         return Optional.empty();
                     }
