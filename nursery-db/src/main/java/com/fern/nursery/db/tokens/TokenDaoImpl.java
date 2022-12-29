@@ -49,10 +49,11 @@ public final class TokenDaoImpl implements TokenDao {
     }
 
     @Override
-    public CreatedToken createToken(String ownerId, Optional<String> description) throws OwnerNotFoundException {
+    public CreatedToken createToken(String ownerId, Optional<String> description, Optional<String> prefix)
+            throws OwnerNotFoundException {
         checkIfOwnerExists(ownerId);
         String tokenId = UUID.randomUUID().toString();
-        String token = generateToken();
+        String token = generateToken(prefix);
         String sha256 =
                 Hashing.sha256().hashString(token, StandardCharsets.UTF_8).toString();
         transactionContext
@@ -140,10 +141,11 @@ public final class TokenDaoImpl implements TokenDao {
         return numUpdated > 0;
     }
 
-    private static String generateToken() {
+    private static String generateToken(Optional<String> prefix) {
         byte[] randomBytes = new byte[24]; // length could be configurable
         SECURE_RANDOM.nextBytes(randomBytes);
-        return BASE64_ENCODER.encodeToString(randomBytes);
+        String tokenValue = BASE64_ENCODER.encodeToString(randomBytes);
+        return prefix.map(s -> s + "_" + tokenValue).orElse(tokenValue);
     }
 
     private void checkIfOwnerExists(String ownerId) throws OwnerNotFoundException {

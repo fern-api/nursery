@@ -28,7 +28,8 @@ public interface TokenDao {
      * @param description description associated with token
      * @return tokenId
      */
-    CreatedToken createToken(String ownerId, Optional<String> description) throws OwnerNotFoundException;
+    CreatedToken createToken(String ownerId, Optional<String> description, Optional<String> prefix)
+            throws OwnerNotFoundException;
 
     Optional<TokenInfo> getToken(String token);
 
