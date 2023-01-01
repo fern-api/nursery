@@ -7,9 +7,9 @@ types:
 
   TokenId:
     type: string
-  #    examples:
-  #      - name: Example1
-  #        value: some-token-id
+#    examples:
+#      - name: Example1
+#        value: some-token-id
 
   CreateTokenResponse:
     properties:

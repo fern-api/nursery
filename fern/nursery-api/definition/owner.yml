@@ -1,24 +1,24 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
 
 types:
-  #
+
   CustomOwnerData:
     type: unknown
-  #    examples:
-  #      - name: Example1
-  #        value:
-  #          custom-key: custom-value
+#    examples:
+#      - name: Example1
+#        value:
+#          custom-key: custom-value
 
   OwnerId:
     type: string
     docs: Unique id for an owner.
-  #    examples:
-  #      - name: Example1
-  #        value: some-owner-id
-  #
+#    examples:
+#      - name: Example1
+#        value: some-owner-id
+#
   Owner:
     properties:
-      ownerId: string
+      ownerId: OwnerId
       data: CustomOwnerData
 #    examples:
 #      - name: Example1
