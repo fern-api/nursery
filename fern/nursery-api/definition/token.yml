@@ -7,20 +7,20 @@ types:
 
   TokenId:
     type: string
-#    examples:
-#      - name: Example1
-#        value: some-token-id
+  #    examples:
+  #      - name: Example1
+  #        value: some-token-id
 
   CreateTokenResponse:
     properties:
       token: string
       tokenId: TokenId
-#    examples:
-#      - name: Example1
-#        value:
-#          token: some-token-value
-#          tokenId: $TokenId.Example1
-#
+  #    examples:
+  #      - name: Example1
+  #        value:
+  #          token: some-token-value
+  #          tokenId: $TokenId.Example1
+  #
   TokenMetadata:
     properties:
       tokenId: TokenId
@@ -28,15 +28,15 @@ types:
       description: optional<string>
       createdTime: datetime
       status: TokenStatus
-#    examples:
-#      - name: Example1
-#        value:
-#          tokenId: $TokenId.Example1
-#          ownerId: $owner.OwnerId.Example1
-#          createdTime: "2022-12-23T10:43:35Z"
-#          status: $TokenStatus.ActiveExample
-#
-#
+  #    examples:
+  #      - name: Example1
+  #        value:
+  #          tokenId: $TokenId.Example1
+  #          ownerId: $owner.OwnerId.Example1
+  #          createdTime: "2022-12-23T10:43:35Z"
+  #          status: $TokenStatus.ActiveExample
+  #
+  #
   TokenStatus:
     union:
       active: {}
@@ -76,15 +76,15 @@ services:
           response: CreateTokenResponse
           errors:
             - owner.OwnerNotFoundError
-#          examples:
-#            - request:
-#                ownerId: $owner.OwnerId.Example1
-#              response:
-#                body: $CreateTokenResponse.Example1
-#            - request:
-#                ownerId: missing-owner-id
-#              response:
-#                error: owner.OwnerNotFoundError
+        #          examples:
+        #            - request:
+        #                ownerId: $owner.OwnerId.Example1
+        #              response:
+        #                body: $CreateTokenResponse.Example1
+        #            - request:
+        #                ownerId: missing-owner-id
+        #              response:
+        #                error: owner.OwnerNotFoundError
 
         getTokenMetadata:
           method: POST
@@ -97,15 +97,15 @@ services:
           response: TokenMetadata
           errors:
             - TokenNotFoundError
-#          examples:
-#            - request:
-#                token: token-value
-#              response:
-#                body: $TokenMetadata.Example1
-#            - request:
-#                token: missing-token-value
-#              response:
-#                error: TokenNotFoundError
+        #          examples:
+        #            - request:
+        #                token: token-value
+        #              response:
+        #                body: $TokenMetadata.Example1
+        #            - request:
+        #                token: missing-token-value
+        #              response:
+        #                error: TokenNotFoundError
 
 
         # add paging
@@ -117,16 +117,16 @@ services:
           response: list<TokenMetadata>
           errors:
             - owner.OwnerNotFoundError
-#          examples:
-#            - path-parameters:
-#                ownerId: $owner.OwnerId.Example1
-#              response:
-#                body:
-#                  - $TokenMetadata.Example1
-#            - path-parameters:
-#                ownerId: missing-owner-id
-#              response:
-#                error: owner.OwnerNotFoundError
+        #          examples:
+        #            - path-parameters:
+        #                ownerId: $owner.OwnerId.Example1
+        #              response:
+        #                body:
+        #                  - $TokenMetadata.Example1
+        #            - path-parameters:
+        #                ownerId: missing-owner-id
+        #              response:
+        #                error: owner.OwnerNotFoundError
 
         revokeTokenById:
           method: POST
@@ -135,13 +135,13 @@ services:
             tokenId: TokenId
           errors:
             - TokenNotFoundError
-#          examples:
-#            - path-parameters:
-#                tokenId: $TokenId.Example1
-#            - path-parameters:
-#                tokenId: missing-token-id
-#              response:
-#                error: TokenNotFoundError
+        #          examples:
+        #            - path-parameters:
+        #                tokenId: $TokenId.Example1
+        #            - path-parameters:
+        #                tokenId: missing-token-id
+        #              response:
+        #                error: TokenNotFoundError
 
         revokeToken:
           method: POST
