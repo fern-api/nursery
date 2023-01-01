@@ -1,30 +1,30 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
 
 types:
-
+#
   CustomOwnerData:
     type: unknown
-    examples:
-      - name: Example1
-        value:
-          custom-key: custom-value
+#    examples:
+#      - name: Example1
+#        value:
+#          custom-key: custom-value
 
   OwnerId:
     type: string
     docs: Unique id for an owner.
-    examples:
-      - name: Example1
-        value: some-owner-id
-
+#    examples:
+#      - name: Example1
+#        value: some-owner-id
+#
   Owner:
     properties:
-      ownerId: OwnerId
+      ownerId: string
       data: CustomOwnerData
-    examples:
-      - name: Example1
-        value:
-          ownerId: $OwnerId.Example1
-          data: $CustomOwnerData.Example1
+#    examples:
+#      - name: Example1
+#        value:
+#          ownerId: $OwnerId.Example1
+#          data: $CustomOwnerData.Example1
 
 services:
   http:
@@ -45,16 +45,16 @@ services:
                 data: CustomOwnerData
           errors:
             - OwnerAlreadyExistsError
-          examples:
-            - request:
-                ownerId: $OwnerId.Example1
-                data: $CustomOwnerData.Example1
-            - request:
-                ownerId: duplicate-owner-id
-                data: $CustomOwnerData.Example1
-              response:
-                error: OwnerAlreadyExistsError
-          
+#          examples:
+#            - request:
+#                ownerId: $OwnerId.Example1
+#                data: $CustomOwnerData.Example1
+#            - request:
+#                ownerId: duplicate-owner-id
+#                data: $CustomOwnerData.Example1
+#              response:
+#                error: OwnerAlreadyExistsError
+
         get:
           method: GET
           path: /{ownerId}
@@ -63,15 +63,15 @@ services:
           response: Owner
           errors:
             - OwnerNotFoundError
-          examples:
-            - path-parameters:
-                ownerId: $OwnerId.Example1
-              response:
-                body: $Owner.Example1
-            - path-parameters:
-                ownerId: missing-owner-id
-              response:
-                error: OwnerNotFoundError
+#          examples:
+#            - path-parameters:
+#                ownerId: $OwnerId.Example1
+#              response:
+#                body: $Owner.Example1
+#            - path-parameters:
+#                ownerId: missing-owner-id
+#              response:
+#                error: OwnerNotFoundError
 
         update:
           method: PUT
@@ -86,21 +86,21 @@ services:
           response: Owner
           errors:
             - OwnerNotFoundError
-          examples:
-            - path-parameters:
-                ownerId: $OwnerId.Example1
-              request:
-                data: $CustomOwnerData.Example1
-              response:
-                body:
-                  ownerId: $OwnerId.Example1
-                  data: $CustomOwnerData.Example1
-            - path-parameters:
-                ownerId: missing-owner-id
-              request:
-                data: $CustomOwnerData.Example1
-              response:
-                error: OwnerNotFoundError
+#          examples:
+#            - path-parameters:
+#                ownerId: $OwnerId.Example1
+#              request:
+#                data: $CustomOwnerData.Example1
+#              response:
+#                body:
+#                  ownerId: $OwnerId.Example1
+#                  data: $CustomOwnerData.Example1
+#            - path-parameters:
+#                ownerId: missing-owner-id
+#              request:
+#                data: $CustomOwnerData.Example1
+#              response:
+#                error: OwnerNotFoundError
 
 
 errors:
