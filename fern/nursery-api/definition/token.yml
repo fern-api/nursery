@@ -15,12 +15,12 @@ types:
     properties:
       token: string
       tokenId: TokenId
-  #    examples:
-  #      - name: Example1
-  #        value:
-  #          token: some-token-value
-  #          tokenId: $TokenId.Example1
-  #
+#    examples:
+#      - name: Example1
+#        value:
+#          token: some-token-value
+#          tokenId: $TokenId.Example1
+#
   TokenMetadata:
     properties:
       tokenId: TokenId
