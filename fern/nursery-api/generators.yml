@@ -10,7 +10,7 @@ groups:
   sdks:
     generators:
       - name: fernapi/fern-typescript-sdk
-        version: 0.0.253-1-ga0ee725
+        version: 0.0.252-1-gb8ff94c
         config:
           outputEsm: true
         output:
@@ -53,7 +53,7 @@ groups:
           username: fern
           password: ${FERN_DEV_TOKEN}
       - name: fernapi/fern-typescript-sdk
-        version: 0.0.253-1-ga0ee725
+        version: 0.0.251-1-gace4453
         output:
           location: npm
           url: npm.buildwithfern.com
