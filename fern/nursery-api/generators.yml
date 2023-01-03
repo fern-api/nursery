@@ -11,8 +11,6 @@ groups:
     generators:
       - name: fernapi/fern-typescript-sdk
         version: 0.0.254-2-gcae1df5
-        config:
-          outputEsm: true
         output:
           location: npm
           package-name: '@fern-api/nursery'
