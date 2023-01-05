@@ -39,7 +39,7 @@ groups:
         github:
           repository: fern-api/nursery-postman
       - name: fernapi/fern-pydantic-model
-        version: 0.0.33-3-gdd44309
+        version: 0.0.33-6-gcce569b
   internal:
     generators:
       - name: fernapi/fern-java-sdk
