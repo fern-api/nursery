@@ -15,7 +15,7 @@ org.mockito:* = 3.11.2
 com.palantir.docker.compose:docker-compose-junit-jupiter = 1.7.0
 
 # fern
-com.fern.fern:nursery-server-jersey = 0.0.71
+com.fern.fern:nursery-server-jersey = 0.0.70
 
 # db deps
 org.jooq:* = 3.14.9
